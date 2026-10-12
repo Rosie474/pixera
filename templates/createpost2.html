@@ -1,0 +1,644 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post — Pixera</title>
+    <link rel="stylesheet" href="{% static 'createpost2.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<base target="_blank">
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="top-navbar" id="topNavbar">
+        <div class="navbar-container">
+            <a href="{% url 'dashboard' %}" class="nav-logo" target="_self">
+                <img src="{% static 'pixeralogo1.png' %}"
+                    alt="Pixera"
+                    class="nav-logo-img">
+
+                <span class="nav-logo-text">Pixera</span>
+            </a>
+
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search drafts, captions, tags...">
+                <button class="search-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+            <div class="nav-actions">
+                <button class="nav-action-btn" id="notifBtn" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge">3</span>
+                </button>
+                <button class="nav-action-btn create-post-btn" id="createPostBtn">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Create</span>
+                </button>
+                <div class="nav-profile">
+                    {% if user.profile.profile_picture %}
+                        <img src="{{ user.profile.profile_picture.url }}" alt="Profile" class="nav-avatar">
+                    {% else %}
+                        <img src="/static/default.jpg" alt="profile" class="nav-avatar">
+                    {% endif %}
+                    <div class="profile-dropdown">
+                        <a href="#"><i class="fa-regular fa-user"></i> Profile</a>
+                        <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <a href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a>
+                    </div>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="dashboard-layout">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar" id="leftSidebar">
+            <div class="sidebar-inner">
+                <nav class="sidebar-nav">
+                    <a href="{% url "dashboard" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-house"></i></span>
+                        <span class="sidebar-label">Home</span>
+                    </a>
+                    <a href="{% url "discover" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-compass"></i></span>
+                        <span class="sidebar-label">Explore</span>
+                    </a>
+                    <a href="{% url "boards" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-palette"></i></span>
+                        <span class="sidebar-label">Boards</span>
+                    </a>
+                    <a href="{% url "messages" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-regular fa-comment-dots"></i></span>
+                        <span class="sidebar-label">Messages</span>
+                        <span class="sidebar-badge">3</span>
+                    </a>
+                    <a href="{% url "profile" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-regular fa-user"></i></span>
+                        <span class="sidebar-label">Profile</span>
+                    </a>
+                    <a href="{% url "settings" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-gear"></i></span>
+                        <span class="sidebar-label">Settings</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="mood-tracker-mini">
+                        <span class="mood-label">Today's Mood</span>
+                        <div class="mood-options">
+                            <button class="mood-btn mood-happy active" title="Happy"><i class="fa-solid fa-face-smile"></i></button>
+                            <button class="mood-btn mood-calm" title="Calm"><i class="fa-solid fa-face-meh"></i></button>
+                            <button class="mood-btn mood-excited" title="Excited"><i class="fa-solid fa-face-laugh-beam"></i></button>
+                            <button class="mood-btn mood-sad" title="Reflective"><i class="fa-solid fa-face-frown"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center: Create Post Editor -->
+        <main class="center-feed" id="centerFeed">
+            <div class="page-header">
+                <h1>Create Your Glow-Up</h1>
+                <p>Craft, preview, and share your story with the community</p>
+            </div>
+
+            <!-- Image Upload -->
+                <form method="POST" enctype="multipart/form-data" action="{% url 'createpost2' %}">
+                    <input type="hidden" name="post_type" id="postTypeInput" value="image-inspiration">
+                    {% csrf_token %}
+                    <div class="editor-card">
+                        <div class="card-header-bar">
+                            <div class="card-header-left">
+                                <div class="card-header-icon"><i class="fa-solid fa-image"></i></div>
+                                <h3>Upload Image</h3>
+                            </div>
+                        </div>
+                        <div class="upload-zone" id="uploadZone">
+                            <div class="upload-content">
+                                <div class="upload-icon-wrap">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                                </div>
+                                <p class="upload-title">Drag & drop your image here</p>
+                                <p class="upload-subtitle">or click to browse files</p>
+                                <span class="upload-hint">Supports JPG, PNG, GIF up to 10MB</span>
+                            </div>
+                            <input type="file" id="fileInput" name= 'image' accept="image/*" hidden>
+                            <div class="upload-preview" id="uploadPreview">
+                                <img id="previewImg" src="" alt="Preview">
+                                <button class="remove-img-btn" id="removeImgBtn"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Caption -->
+                    <div class="editor-card">
+                        <div class="card-header-bar">
+                            <div class="card-header-left">
+                                <div class="card-header-icon"><i class="fa-solid fa-pen-fancy"></i></div>
+                                <h3>Caption</h3>
+                            </div>
+                            <button class="ai-btn" id="aiBtn">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> AI Suggest
+                            </button>
+                        </div>
+                        <div class="textarea-wrap">
+                            <textarea id="captionInput" name='caption' placeholder="What's on your mind? Share your glow-up journey, mood, or beauty wisdom..."></textarea>
+                            <div class="char-count"><span id="charCount">0</span> / 500</div>
+                        </div>
+                    </div>
+
+                    <!-- Post Type -->
+                    <div class="editor-card">
+                        <div class="card-header-bar">
+                            <div class="card-header-left">
+                                <div class="card-header-icon"><i class="fa-solid fa-layer-group"></i></div>
+                                <h3>Post Type</h3>
+                            </div>
+                        </div>
+                        <div class="dropdown-wrap">
+                            <div class="custom-dropdown" id="postTypeDropdown">
+                                <div class="dropdown-selected" id="dropdownSelected">
+                                    <span class="dropdown-icon"><i class="fa-solid fa-image"></i></span>
+                                    <span class="dropdown-label">Image Inspiration</span>
+                                    <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+                                </div>
+                                <div class="dropdown-options" id="dropdownOptions">
+                                    <div class="dropdown-option active" data-value="image-inspiration" data-icon="fa-image">
+                                        <i class="fa-solid fa-image"></i> Image Inspiration
+                                    </div>
+                                    <div class="dropdown-option" data-value="mood-journal" data-icon="fa-book-open">
+                                        <i class="fa-solid fa-book-open"></i> Mood Journal
+                                    </div>
+                                    <div class="dropdown-option" data-value="beauty-tip" data-icon="fa-wand-magic-sparkles">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Beauty Tip
+                                    </div>
+                                    <div class="dropdown-option" data-value="anonymous-girl-talk" data-icon="fa-user-secret">
+                                        <i class="fa-solid fa-user-secret"></i> Anonymous Girl Talk
+                                    </div>
+                                    <div class="dropdown-option" data-value="fashion" data-icon="fa-user-secret">
+                                        <i class="fa-solid fa-user-secret"></i> Fashion
+                                    </div>
+                                    <div class="dropdown-option" data-value="skin" data-icon="fa-user-secret">
+                                        <i class="fa-solid fa-user-secret"></i> Skin
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hashtags -->
+                     <input type="hidden" name="tags" id="tagsInput">
+                    <div class="editor-card">
+                        <div class="card-header-bar">
+                            <div class="card-header-left">
+                                <div class="card-header-icon"><i class="fa-solid fa-hashtag"></i></div>
+                                <h3>Hashtags & Tags</h3>
+                            </div>
+                        </div>
+                        <div class="tag-input-wrap">
+                            <input type="text" id="tagInput" placeholder="Add tags and press Enter...">
+                            <div class="tag-suggestions">
+                                <span class="suggest-tag" data-tag="GlowUp">#GlowUp</span>
+                                <span class="suggest-tag" data-tag="SelfCare">#SelfCare</span>
+                                <span class="suggest-tag" data-tag="BeautyTips">#BeautyTips</span>
+                                <span class="suggest-tag" data-tag="Mood">#Mood</span>
+                                <span class="suggest-tag" data-tag="GirlTalk">#GirlTalk</span>
+                            </div>
+                            <div class="tag-list" id="tagList"></div>
+                        </div>
+                    </div>
+
+                    <!-- Publish Bar -->
+                    <div class="publish-bar">
+                        <button class="btn-draft"><i class="fa-regular fa-floppy-disk"></i> Save Draft</button>
+                        <button type="submit" class="btn-publish" id="publishBtn"><i class="fa-solid fa-paper-plane"></i> Publish Post</button>
+                    </div>
+                </form>  
+        </main>
+
+        <!-- Right Sidebar: Live Preview -->
+        <aside class="right-sidebar" id="rightSidebar">
+            <div class="sidebar-inner">
+                <!-- Live Preview Card -->
+                <div class="sidebar-card preview-card-wrap">
+                    <h3 class="sidebar-title">
+                        <span class="live-dot"></span>
+                        Live Preview
+                    </h3>
+
+                    <div class="social-card" id="socialCard">
+                        <!-- Post Header -->
+                        <div class="social-header">
+                            <div class="social-avatar">
+                                {% if user.profile.profile_picture %}
+                                    <img src="{{ user.profile.profile_picture.url }}" alt="user" class="nav-avatar">
+                                {% else %}
+                                    <img src="/static/default.jpg" alt="user" class="nav-avatar">
+                                {% endif %}
+                            </div>
+                            <div class="social-meta">
+                                <div class="social-name">Your Name</div>
+                                <div class="social-time">Just now</div>
+                            </div>
+                            <div class="social-badge" id="previewBadge">
+                                <i class="fa-solid fa-image"></i> Image Inspiration
+                            </div>
+                        </div>
+
+                        <!-- Post Image -->
+                        <div class="social-image" id="previewImageArea">
+                            <div class="placeholder-image">
+                                <i class="fa-regular fa-image"></i>
+                                <span>Your image will appear here</span>
+                            </div>
+                            <img id="previewSocialImg" src="" alt="" style="display:none;">
+                        </div>
+                        
+                        <!-- Post Caption -->
+                        <div class="social-caption" id="previewCaption">
+                            <span class="caption-username">Your Name</span>
+                            <span class="caption-text">Your caption will appear here...</span>
+                        </div>
+
+
+                        <!-- Post Actions -->
+                        <div class="social-actions">
+                            <div class="action-left">
+                                <button><i class="fa-regular fa-heart"></i></button>
+                                <button><i class="fa-regular fa-comment"></i></button>
+                                <button><i class="fa-regular fa-bookmark"></i></button>
+                            </div>
+                        </div>
+                        
+
+                        <!-- Post Tags -->
+                        <div class="social-tags" id="previewTags"></div>
+                    </div>
+                </div>
+
+                <!-- Preview Stats -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">
+                        <i class="fa-solid fa-chart-simple"></i>
+                        Post Insights
+                    </h3>
+                    <div class="preview-stats">
+                        <div class="stat-item">
+                            <i class="fa-solid fa-eye"></i>
+                            <span>Estimated reach</span>
+                            <strong>1.2K — 3.5K</strong>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>Engagement score</span>
+                            <strong class="stat-high">High</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Tips -->
+                <div class="sidebar-card tips-card">
+                    <h3 class="sidebar-title">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        Pro Tips
+                    </h3>
+                    <div class="tip-list">
+                        <div class="tip-item">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Posts with images get 2x more engagement</span>
+                        </div>
+                        <div class="tip-item">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Keep captions under 150 characters for best reach</span>
+                        </div>
+                        <div class="tip-item">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Use 3-5 hashtags for optimal discoverability</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-bottom-nav" id="mobileBottomNav">
+        <a href="#" class="mobile-nav-link">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="mobile-nav-link">
+            <i class="fa-solid fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <button class="mobile-create-btn" id="mobileCreateBtn">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+        <a href="#" class="mobile-nav-link">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span>Chat</span>
+        </a>
+        <a href="#" class="mobile-nav-link">
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- AI Toast -->
+    <div class="toast" id="aiToast">
+        <div class="toast-icon"><i class="fa-solid fa-sparkles"></i></div>
+        <div class="toast-body">
+            <strong>AI Suggestion</strong>
+            <p>"Embrace the glow within — your beauty shines brightest when you feel confident in your own skin."</p>
+        </div>
+        <button class="toast-close" id="toastClose"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <!-- Publish Modal -->
+    <div class="modal-overlay" id="publishModal">
+        <div class="modal">
+            <div class="modal-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <h2>Post Published!</h2>
+            <p>Your glow-up story is now live and ready to inspire the community.</p>
+            <button class="modal-btn" id="modalClose">Awesome!</button>
+        </div>
+    </div>
+
+    <script>
+        // ===== MOBILE MENU =====
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const leftSidebar = document.getElementById('leftSidebar');
+        const topNavbar = document.getElementById('topNavbar');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            leftSidebar.classList.toggle('mobile-open');
+            mobileMenuToggle.classList.toggle('active');
+            document.body.classList.toggle('sidebar-open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (leftSidebar.classList.contains('mobile-open') && 
+                !leftSidebar.contains(e.target) && 
+                !mobileMenuToggle.contains(e.target)) {
+                leftSidebar.classList.remove('mobile-open');
+                mobileMenuToggle.classList.remove('active');
+                document.body.classList.remove('sidebar-open');
+            }
+        });
+
+        // ===== PROFILE DROPDOWN =====
+        const navProfile = document.querySelector('.nav-profile');
+        navProfile.addEventListener('click', () => {
+            navProfile.classList.toggle('dropdown-open');
+        });
+        document.addEventListener('click', (e) => {
+            if (!navProfile.contains(e.target)) {
+                navProfile.classList.remove('dropdown-open');
+            }
+        });
+
+        // ===== NAVBAR SCROLL =====
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 100) {
+                topNavbar.classList.add('scrolled');
+            } else {
+                topNavbar.classList.remove('scrolled');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // ===== MOOD TRACKER =====
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ===== IMAGE UPLOAD =====
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadPreview = document.getElementById('uploadPreview');
+        const previewImg = document.getElementById('previewImg');
+        const removeImgBtn = document.getElementById('removeImgBtn');
+        const previewSocialImg = document.getElementById('previewSocialImg');
+        const previewImageArea = document.getElementById('previewImageArea');
+        const placeholderImage = previewImageArea.querySelector('.placeholder-image');
+
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length) handleFile(files[0]);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) handleFile(e.target.files[0]);
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                uploadPreview.classList.add('active');
+                previewSocialImg.src = e.target.result;
+                previewSocialImg.style.display = 'block';
+                placeholderImage.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        removeImgBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            uploadPreview.classList.remove('active');
+            previewImg.src = '';
+            fileInput.value = '';
+            previewSocialImg.src = '';
+            previewSocialImg.style.display = 'none';
+            placeholderImage.style.display = 'flex';
+        });
+
+        // ===== CAPTION =====
+        const captionInput = document.getElementById('captionInput');
+        const charCount = document.getElementById('charCount');
+        const previewCaption = document.getElementById('previewCaption');
+
+        captionInput.addEventListener('input', () => {
+            const text = captionInput.value;
+            charCount.textContent = text.length;
+            if (text.length > 500) {
+                captionInput.value = text.slice(0, 500);
+                charCount.textContent = 500;
+            }
+            const captionText = previewCaption.querySelector('.caption-text');
+            captionText.textContent = text.trim() || 'Your caption will appear here...';
+        });
+
+        // ===== DROPDOWN =====
+        const dropdown = document.getElementById('postTypeDropdown');
+        const dropdownSelected = document.getElementById('dropdownSelected');
+        const dropdownOptions = document.getElementById('dropdownOptions');
+        const previewBadge = document.getElementById('previewBadge');
+        const postTypeInput = document.getElementById('postTypeInput');
+
+        dropdownSelected.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownOptions.classList.toggle('active');
+        });
+
+        // close when clicking outside
+        document.addEventListener('click', () => {
+            dropdownOptions.classList.remove('active');
+        });
+
+        dropdownOptions.querySelectorAll('.dropdown-option').forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                dropdownOptions.querySelectorAll('.dropdown-option')
+                    .forEach(o => o.classList.remove('active'));
+
+                opt.classList.add('active');
+
+                const iconClass = opt.dataset.icon;
+                const label = opt.textContent.trim();
+
+                dropdownSelected.querySelector('.dropdown-icon i').className =
+                    `fa-solid ${iconClass}`;
+
+                dropdownSelected.querySelector('.dropdown-label').textContent = label;
+
+                previewBadge.innerHTML = `<i class="fa-solid ${iconClass}"></i> ${label}`;
+
+                postTypeInput.value = opt.dataset.value;
+
+                dropdownOptions.classList.remove('active');
+            });
+        });
+        console.log("dropdown JS loaded");
+
+        // ===== TAGS =====
+        let tags = [];
+
+        function renderTags() {
+            tagList.innerHTML = '';
+            previewTags.innerHTML = '';
+            tags.forEach((tag, idx) => {
+                const chip = document.createElement('span');
+                chip.className = 'tag-chip';
+                chip.innerHTML = `#${tag} <i class="fa-solid fa-xmark" data-idx="${idx}"></i>`;
+                tagList.appendChild(chip);
+
+                const previewTag = document.createElement('span');
+                previewTag.className = 'preview-tag';
+                previewTag.textContent = `#${tag}`;
+                previewTags.appendChild(previewTag);
+            });
+        }
+
+        const tagInput = document.getElementById('tagInput');
+        const tagList = document.getElementById('tagList');
+        const previewTags = document.getElementById('previewTags');
+
+        tagInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && tagInput.value.trim()) {
+                e.preventDefault();
+                const val = tagInput.value.trim().replace(/^#/, '');
+                if (val && !tags.includes(val) && tags.length < 10) {
+                    tags.push(val);
+                    renderTags();
+                }
+                tagInput.value = '';
+            }
+        });
+
+        tagList.addEventListener('click', (e) => {
+            if (e.target.tagName === 'I') {
+                const idx = parseInt(e.target.dataset.idx);
+                tags.splice(idx, 1);
+                renderTags();
+            }
+        });
+
+        document.querySelectorAll('.suggest-tag').forEach(st => {
+            st.addEventListener('click', () => {
+                const tag = st.dataset.tag;
+                if (!tags.includes(tag) && tags.length < 10) {
+                    tags.push(tag);
+                    renderTags();
+                }
+            });
+        });
+
+        // ===== AI TOAST =====
+        const aiSuggestions = [
+            "Embrace the glow within — your beauty shines brightest when you feel confident in your own skin.",
+            "Today's mood: unstoppable. Remember, the best makeup is a genuine smile.",
+            "Self-care isn't selfish — it's essential. Take time for yourself today.",
+            "Beauty begins the moment you decide to be yourself. Shine on!",
+            "A little mascara and a lot of confidence can change everything."
+        ];
+
+        const aiBtn = document.getElementById('aiBtn');
+        const aiToast = document.getElementById('aiToast');
+        const toastClose = document.getElementById('toastClose');
+
+        aiBtn.addEventListener('click', () => {
+            const suggestion = aiSuggestions[Math.floor(Math.random() * aiSuggestions.length)];
+            aiToast.querySelector('.toast-body p').textContent = `"${suggestion}"`;
+            aiToast.classList.add('show');
+            setTimeout(() => aiToast.classList.remove('show'), 5000);
+        });
+
+        toastClose.addEventListener('click', () => {
+            aiToast.classList.remove('show');
+        });
+
+        // ===== PUBLISH =====
+        const publishBtn = document.getElementById('publishBtn');
+        const publishModal = document.getElementById('publishModal');
+        const modalClose = document.getElementById('modalClose');
+
+        document.getElementById('publishBtn').addEventListener('click', () => {
+        document.getElementById('tagsInput').value = tags.join(',');
+        });
+
+        modalClose.addEventListener('click', () => {
+            publishModal.classList.remove('active');
+        });
+
+        publishModal.addEventListener('click', (e) => {
+            if (e.target === publishModal) publishModal.classList.remove('active');
+        });
+
+        
+    </script>
+</body>
+</html>

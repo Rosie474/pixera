@@ -1,0 +1,1178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community — Pixera</title>
+    <link rel="stylesheet" href="{% static 'community.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+    <div id="glowup-preloader" class="glowup-preloader">
+        <div class="preloader-glass-plate">
+            <div class="particles-container">
+                <div class="particle particle-1"></div>
+                <div class="particle particle-2"></div>
+                <div class="particle particle-3"></div>
+                <div class="particle particle-4"></div>
+                <div class="particle particle-5"></div>
+                <div class="particle particle-6"></div>
+                <div class="particle particle-7"></div>
+                <div class="particle particle-8"></div>
+                <div class="particle particle-9"></div>
+                <div class="particle particle-10"></div>
+                <div class="particle particle-11"></div>
+                <div class="particle particle-12"></div>
+            </div>
+            <div class="orb-container">
+                <div class="orb-aura orb-aura-1"></div>
+                <div class="orb-aura orb-aura-2"></div>
+                <div class="orb-aura orb-aura-3"></div>
+                <div class="orb-core">
+                    <div class="orb-inner">
+                        <i class="fa-solid fa-sparkles"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="preloader-text">
+                <span class="text-line">Loading inspiration</span>
+                <span class="text-dots">
+                    <span class="preloader-dot">.</span>
+                    <span class="preloader-dot">.</span>
+                    <span class="preloader-dot">.</span>
+                </span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="preloaderProgress"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Sticky Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="{% url 'index' %}" class="logo">
+                  <img src="{% static 'pixeralogo1.png' %}"
+                    alt="Pixera"
+                    class="nav-logo-img">
+                <span class="logo-text">Pixera</span>
+            </a>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+                <span class="hamburger"></span>
+            </button>
+            <div class="nav-menu" id="navMenu">
+                <a href="{% url "index" %}" class="nav-link" target="_self">Home</a>
+                <a href="{% url "explore" %}" class="nav-link" target="_self">Explore</a>
+                <a href="{% url "community" %}" class="nav-link active" target="_self">Community</a>
+                <a href="{% url "login" %}" class="nav-link nav-login" target="_blank">Login</a>
+                <a href="{% url "signup" %}" class="btn btn-primary btn-small" target="_blank">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Community Hero Section -->
+    <section class="community-hero" id="home">
+        <div class="community-hero-bg">
+            <div class="comm-shape comm-shape-1"></div>
+            <div class="comm-shape comm-shape-2"></div>
+            <div class="comm-shape comm-shape-3"></div>
+            <div class="comm-shape comm-shape-4"></div>
+            <div class="comm-shape comm-shape-5"></div>
+        </div>
+        <div class="community-hero-container">
+            <div class="community-hero-content">
+                <div class="community-hero-badge">
+                    <span class="badge-dot"></span>
+                    <span>2.4M creators inspiring each other</span>
+                </div>
+                <h1 class="community-hero-title">
+                    A Community<br>
+                    <span class="gradient-text">Built on Creativity</span>
+                </h1>
+                <p class="community-hero-subtitle">
+                    Step into a space where creativity meets authenticity. Share your ideas, find your circle, and grow alongside people who celebrate every version of you.
+                </p>
+                <div class="community-hero-buttons">
+                    <a href="{% url "signup" %}" class="btn btn-primary btn-large">
+                        <i class="fa-solid fa-users"></i>
+                        Join the Community
+                    </a>
+                    <a href="{% url "explore" %}" class="btn btn-outline btn-large">
+                        <i class="fa-solid fa-compass"></i>
+                        Explore Inspirations
+                    </a>
+                </div>
+                <div class="community-hero-trust">
+                    <div class="trust-avatars">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop&crop=face" alt="Member">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Member">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop&crop=face" alt="Member">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face" alt="Member">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=60&h=60&fit=crop&crop=face" alt="Member">
+                        <div class="trust-avatars-more">+2.4M</div>
+                    </div>
+                    <span class="trust-text">Already part of the creative community</span>
+                </div>
+            </div>
+            <!-- Floating Community Cards -->
+            <div class="community-hero-visual">
+                <div class="comm-float-card comm-float-1">
+                    <div class="comm-float-header">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop&crop=face" alt="User" class="comm-float-avatar">
+                        <div class="comm-float-info">
+                            <span class="comm-float-name">Alex Chen</span>
+                            <span class="comm-float-action">shared a collection</span>
+                        </div>
+                    </div>
+                    <div class="comm-float-preview">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=200&h=150&fit=crop" alt="Vision board">
+                        <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=200&h=150&fit=crop" alt="Vision board">
+                        <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=200&h=150&fit=crop" alt="Vision board">
+                    </div>
+                    <div class="comm-float-stats">
+                        <span><i class="fa-solid fa-heart"></i> 1.2K</span>
+                        <span><i class="fa-solid fa-comment"></i> 89</span>
+                    </div>
+                </div>
+                <div class="comm-float-card comm-float-2">
+                    <div class="comm-float-icon"><i class="fa-solid fa-fire"></i></div>
+                    <div class="comm-float-text">
+                        <span class="comm-float-number">847</span>
+                        <span class="comm-float-desc">new members joined today</span>
+                    </div>
+                </div>
+                <div class="comm-float-card comm-float-3">
+                    <div class="comm-float-chat">
+                        <div class="comm-chat-bubble">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop&crop=face" alt="">
+                            <div class="comm-chat-text">Your aesthetic is incredible! That style is unreal</div>
+                        </div>
+                        <div class="comm-chat-bubble comm-chat-reply">
+                            <div class="comm-chat-text">Thank you! Your support means everything</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll-indicator">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Stats Section -->
+    <section class="community-stats">
+        <div class="section-container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-glow"></div>
+                    <div class="stat-icon-wrap">
+                        <i class="fa-solid fa-images"></i>
+                    </div>
+                    <div class="stat-number" data-count="2840000">0</div>
+                    <div class="stat-label">Inspirations Shared</div>
+                    <div class="stat-trend"><i class="fa-solid fa-arrow-trend-up"></i> +12% this month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-glow"></div>
+                    <div class="stat-icon-wrap">
+                        <i class="fa-solid fa-user-group"></i>
+                    </div>
+                    <div class="stat-number" data-count="890000">0</div>
+                    <div class="stat-label">Active Creators</div>
+                    <div class="stat-trend"><i class="fa-solid fa-arrow-trend-up"></i> +8% this month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-glow"></div>
+                    <div class="stat-icon-wrap">
+                        <i class="fa-solid fa-palette"></i>
+                    </div>
+                    <div class="stat-number" data-count="1560000">0</div>
+                    <div class="stat-label">Collections Created</div>
+                    <div class="stat-trend"><i class="fa-solid fa-arrow-trend-up"></i> +18% this month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-glow"></div>
+                    <div class="stat-icon-wrap">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <div class="stat-number" data-count="4200000">0</div>
+                    <div class="stat-label">Community Discussions</div>
+                    <div class="stat-trend"><i class="fa-solid fa-arrow-trend-up"></i> +22% this month</div>
+                </div>
+                <div class="stat-card stat-card-wide">
+                    <div class="stat-card-glow"></div>
+                    <div class="stat-icon-wrap">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <div class="stat-number" data-count="67000000">0</div>
+                    <div class="stat-label">Monthly Interactions</div>
+                    <div class="stat-trend"><i class="fa-solid fa-arrow-trend-up"></i> +15% this month</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Creative Circles / Interest Groups Section -->
+    <section class="glow-circles" id="circles">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-eyebrow">Creative Circles</span>
+                <h2 class="section-title">Find Your<br><span class="gradient-text">People</span></h2>
+                <p class="section-subtitle">
+                    Join interest-based communities where creators share, learn, and grow together. Every circle is a safe space to be your most authentic self.
+                </p>
+            </div>
+            <div class="circles-grid">
+                <div class="circle-card">
+                    <div class="circle-card-glow"></div>
+                    <div class="circle-cover">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=300&fit=crop" alt="Fashion Lovers">
+                        <div class="circle-cover-overlay">
+                            <div class="circle-members-preview">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop&crop=face" alt="">
+                                <span class="members-count">+124K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="circle-body">
+                        <div class="circle-icon"><i class="fa-solid fa-shirt"></i></div>
+                        <h3 class="circle-name">Fashion Lovers</h3>
+                        <p class="circle-desc">From thrift flips to luxury hauls — share your style evolution and get honest feedback from people who get it.</p>
+                        <div class="circle-meta">
+                            <span><i class="fa-solid fa-users"></i> 124K members</span>
+                            <span><i class="fa-solid fa-circle" style="color:#22c55e;font-size:6px;"></i> 3.2K online</span>
+                        </div>
+                        <button class="btn btn-primary btn-full join-btn" data-action="join">
+                            <i class="fa-solid fa-plus"></i> Join Circle
+                        </button>
+                    </div>
+                </div>
+                <div class="circle-card">
+                    <div class="circle-card-glow"></div>
+                    <div class="circle-cover">
+                        <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=500&h=300&fit=crop" alt="Wellness Circle">
+                        <div class="circle-cover-overlay">
+                            <div class="circle-members-preview">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=50&h=50&fit=crop&crop=face" alt="">
+                                <span class="members-count">+98K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="circle-body">
+                        <div class="circle-icon"><i class="fa-solid fa-spa"></i></div>
+                        <h3 class="circle-name">Wellness Circle</h3>
+                        <p class="circle-desc">Wellness routines, self-care inspiration, and mindfulness practices. Your daily dose of inspiration.</p>
+                        <div class="circle-meta">
+                            <span><i class="fa-solid fa-users"></i> 98K members</span>
+                            <span><i class="fa-solid fa-circle" style="color:#22c55e;font-size:6px;"></i> 2.8K online</span>
+                        </div>
+                        <button class="btn btn-primary btn-full join-btn" data-action="join">
+                            <i class="fa-solid fa-plus"></i> Join Circle
+                        </button>
+                    </div>
+                </div>
+                <div class="circle-card">
+                    <div class="circle-card-glow"></div>
+                    <div class="circle-cover">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&h=300&fit=crop" alt="Glow Diaries">
+                        <div class="circle-cover-overlay">
+                            <div class="circle-members-preview">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" alt="">
+                                <span class="members-count">+156K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="circle-body">
+                        <div class="circle-icon"><i class="fa-solid fa-book-open"></i></div>
+                        <h3 class="circle-name">Creative Diaries</h3>
+                        <p class="circle-desc">Document your creative journey. Share wins, experiments, and everything in between with people who cheer you on.</p>
+                        <div class="circle-meta">
+                            <span><i class="fa-solid fa-users"></i> 156K members</span>
+                            <span><i class="fa-solid fa-circle" style="color:#22c55e;font-size:6px;"></i> 4.1K online</span>
+                        </div>
+                        <button class="btn btn-primary btn-full join-btn" data-action="join">
+                            <i class="fa-solid fa-plus"></i> Join Circle
+                        </button>
+                    </div>
+                </div>
+                <div class="circle-card">
+                    <div class="circle-card-glow"></div>
+                    <div class="circle-cover">
+                        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&h=300&fit=crop" alt="Hair Community">
+                        <div class="circle-cover-overlay">
+                            <div class="circle-members-preview">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=50&h=50&fit=crop&crop=face" alt="">
+                                <span class="members-count">+87K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="circle-body">
+                        <div class="circle-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <h3 class="circle-name">Style Community</h3>
+                        <p class="circle-desc">From style transformations to color experiments. Get recommendations, tutorials, and honest reviews from real people.</p>
+                        <div class="circle-meta">
+                            <span><i class="fa-solid fa-users"></i> 87K members</span>
+                            <span><i class="fa-solid fa-circle" style="color:#22c55e;font-size:6px;"></i> 1.9K online</span>
+                        </div>
+                        <button class="btn btn-primary btn-full join-btn" data-action="join">
+                            <i class="fa-solid fa-plus"></i> Join Circle
+                        </button>
+                    </div>
+                </div>
+                <div class="circle-card">
+                    <div class="circle-card-glow"></div>
+                    <div class="circle-cover">
+                        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&h=300&fit=crop" alt="Fitness Queens">
+                        <div class="circle-cover-overlay">
+                            <div class="circle-members-preview">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=50&h=50&fit=crop&crop=face" alt="">
+                                <span class="members-count">+112K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="circle-body">
+                        <div class="circle-icon"><i class="fa-solid fa-dumbbell"></i></div>
+                        <h3 class="circle-name">Fitness Enthusiasts</h3>
+                        <p class="circle-desc">Workout routines, nutrition tips, and body-positive motivation. Strong is the new creative, and we prove it daily.</p>
+                        <div class="circle-meta">
+                            <span><i class="fa-solid fa-users"></i> 112K members</span>
+                            <span><i class="fa-solid fa-circle" style="color:#22c55e;font-size:6px;"></i> 3.7K online</span>
+                        </div>
+                        <button class="btn btn-primary btn-full join-btn" data-action="join">
+                            <i class="fa-solid fa-plus"></i> Join Circle
+                        </button>
+                    </div>
+                </div>
+                <div class="circle-card">
+                    <div class="circle-card-glow"></div>
+                    <div class="circle-cover">
+                        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&h=300&fit=crop" alt="Soft Life Creators">
+                        <div class="circle-cover-overlay">
+                            <div class="circle-members-preview">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=50&h=50&fit=crop&crop=face" alt="">
+                                <span class="members-count">+73K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="circle-body">
+                        <div class="circle-icon"><i class="fa-solid fa-mug-hot"></i></div>
+                        <h3 class="circle-name">Creative Lifestyle</h3>
+                        <p class="circle-desc">Aesthetic living on any budget. Share your slow-living inspiration, creative routines, and the art of treating yourself.</p>
+                        <div class="circle-meta">
+                            <span><i class="fa-solid fa-users"></i> 73K members</span>
+                            <span><i class="fa-solid fa-circle" style="color:#22c55e;font-size:6px;"></i> 1.4K online</span>
+                        </div>
+                        <button class="btn btn-primary btn-full join-btn" data-action="join">
+                            <i class="fa-solid fa-plus"></i> Join Circle
+                        </button>
+                    </div>
+                </div>
+                <div class="circle-card">
+                    <div class="circle-card-glow"></div>
+                    <div class="circle-cover">
+                        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&h=300&fit=crop" alt="Beauty Talk">
+                        <div class="circle-cover-overlay">
+                            <div class="circle-members-preview">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=50&h=50&fit=crop&crop=face" alt="">
+                                <span class="members-count">+189K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="circle-body">
+                        <div class="circle-icon"><i class="fa-solid fa-hand-sparkles"></i></div>
+                        <h3 class="circle-name">Design Talk</h3>
+                        <p class="circle-desc">Design inspiration, creative tutorials, project deep-dives, and honest feedback. Your creative BFFs are here.</p>
+                        <div class="circle-meta">
+                            <span><i class="fa-solid fa-users"></i> 189K members</span>
+                            <span><i class="fa-solid fa-circle" style="color:#22c55e;font-size:6px;"></i> 5.2K online</span>
+                        </div>
+                        <button class="btn btn-primary btn-full join-btn" data-action="join">
+                            <i class="fa-solid fa-plus"></i> Join Circle
+                        </button>
+                    </div>
+                </div>
+                <div class="circle-card">
+                    <div class="circle-card-glow"></div>
+                    <div class="circle-cover">
+                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&h=300&fit=crop" alt="Lifestyle Lounge">
+                        <div class="circle-cover-overlay">
+                            <div class="circle-members-preview">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop&crop=face" alt="">
+                                <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=50&h=50&fit=crop&crop=face" alt="">
+                                <span class="members-count">+65K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="circle-body">
+                        <div class="circle-icon"><i class="fa-solid fa-sun"></i></div>
+                        <h3 class="circle-name">Lifestyle Lounge</h3>
+                        <p class="circle-desc">Career inspiration, travel diaries, home organization, and everything that makes life feel elevated and intentional.</p>
+                        <div class="circle-meta">
+                            <span><i class="fa-solid fa-users"></i> 65K members</span>
+                            <span><i class="fa-solid fa-circle" style="color:#22c55e;font-size:6px;"></i> 1.1K online</span>
+                        </div>
+                        <button class="btn btn-primary btn-full join-btn" data-action="join">
+                            <i class="fa-solid fa-plus"></i> Join Circle
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Community Posts -->
+    <section class="community-posts">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-eyebrow">What's Happening</span>
+                <h2 class="section-title">Trending in the<br><span class="gradient-text">Community</span></h2>
+                <p class="section-subtitle">
+                    Real conversations, real creativity. Peek into the discussions shaping our community right now.
+                </p>
+            </div>
+            <div class="posts-grid">
+                <!-- Post 1: Beauty Discussion -->
+                <div class="post-card post-featured">
+                    <div class="post-header">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop&crop=face" alt="Amara" class="post-avatar">
+                        <div class="post-author-info">
+                            <span class="post-author">Alex Chen</span>
+                            <span class="post-handle">@alexcreates · 2h ago</span>
+                        </div>
+                        <span class="post-badge"><i class="fa-solid fa-crown"></i></span>
+                    </div>
+                    <div class="post-content">
+                        <p>Just curated my dream workspace setup after 30 days of planning. The minimalist aesthetic is REAL. Swipe for my before & after — I'm obsessed.</p>
+                        <div class="post-media">
+                            <img src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop" alt="Skincare">
+                            <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&h=300&fit=crop" alt="Skincare">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <button class="post-action" data-action="like"><i class="fa-regular fa-heart"></i> <span>2.4K</span></button>
+                        <button class="post-action" data-action="comment"><i class="fa-regular fa-comment"></i> <span>187</span></button>
+                        <button class="post-action" data-action="save"><i class="fa-regular fa-bookmark"></i> <span>892</span></button>
+                        <button class="post-action" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
+                    <div class="post-comments-preview">
+                        <div class="comment-preview">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=30&h=30&fit=crop&crop=face" alt="">
+                            <span><strong>Jasmine</strong> Which vitamin C serum did you use? This is goals!</span>
+                        </div>
+                        <div class="comment-preview">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=30&h=30&fit=crop&crop=face" alt="">
+                            <span><strong>Riley</strong> Your aesthetic is absolutely unreal. Saving this for my inspiration!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post 2: Anonymous Creative Talk -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar anon-avatar"><i class="fa-solid fa-mask"></i></div>
+                        <div class="post-author-info">
+                            <span class="post-author">Anonymous Creator</span>
+                            <span class="post-handle">Creative Diaries · 4h ago</span>
+                        </div>
+                        <span class="post-tag anon">Anonymous</span>
+                    </div>
+                    <div class="post-content">
+                        <p>Can we talk about creative blocks? I just landed my biggest client project and I keep waiting for someone to realize they made a mistake. How do you all deal with feeling like you don't deserve your wins?</p>
+                    </div>
+                    <div class="post-actions">
+                        <button class="post-action" data-action="like"><i class="fa-regular fa-heart"></i> <span>5.1K</span></button>
+                        <button class="post-action" data-action="comment"><i class="fa-regular fa-comment"></i> <span>423</span></button>
+                        <button class="post-action" data-action="save"><i class="fa-regular fa-bookmark"></i> <span>1.2K</span></button>
+                        <button class="post-action" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
+                    <div class="post-comments-preview">
+                        <div class="comment-preview">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=30&h=30&fit=crop&crop=face" alt="">
+                            <span><strong>Zoe</strong> You EARNED that project. Read that again.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post 3: Mood Journal -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop&crop=face" alt="Priya" class="post-avatar">
+                        <div class="post-author-info">
+                            <span class="post-author">Riley Sharma</span>
+                            <span class="post-handle">@rileyinspires · 6h ago</span>
+                        </div>
+                        <span class="post-badge verified"><i class="fa-solid fa-check"></i></span>
+                    </div>
+                    <div class="post-content">
+                        <p>Week 12 of my idea journaling journey on Pixera. Looking back at my entries from January, I can literally see my creative growth building. The patterns are so clear now. If you're on the fence about starting — just do it.</p>
+                        <div class="mood-journal-preview">
+                            <div class="mood-week">
+                                <div class="mood-day mood-happy"><i class="fa-solid fa-face-smile"></i></div>
+                                <div class="mood-day mood-calm"><i class="fa-solid fa-face-meh"></i></div>
+                                <div class="mood-day mood-excited"><i class="fa-solid fa-face-laugh-beam"></i></div>
+                                <div class="mood-day mood-happy"><i class="fa-solid fa-face-smile"></i></div>
+                                <div class="mood-day mood-calm"><i class="fa-solid fa-face-meh"></i></div>
+                                <div class="mood-day mood-excited"><i class="fa-solid fa-face-laugh-beam"></i></div>
+                                <div class="mood-day mood-happy active"><i class="fa-solid fa-face-smile"></i></div>
+                            </div>
+                            <div class="mood-streak">
+                                <i class="fa-solid fa-fire"></i>
+                                <span>84 day streak!</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <button class="post-action" data-action="like"><i class="fa-regular fa-heart"></i> <span>3.7K</span></button>
+                        <button class="post-action" data-action="comment"><i class="fa-regular fa-comment"></i> <span>256</span></button>
+                        <button class="post-action" data-action="save"><i class="fa-regular fa-bookmark"></i> <span>2.1K</span></button>
+                        <button class="post-action" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
+                </div>
+
+                <!-- Post 4: Creator Highlight -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face" alt="Zoe" class="post-avatar">
+                        <div class="post-author-info">
+                            <span class="post-author">Zoe Martinez</span>
+                            <span class="post-handle">@zoevisuals · 8h ago</span>
+                        </div>
+                        <span class="post-badge"><i class="fa-solid fa-crown"></i></span>
+                    </div>
+                    <div class="post-content">
+                        <p>Your portfolio is not a before picture. It's not an after picture either. It's your RIGHT NOW picture, and it deserves love in every single frame. Dropped a new photography tutorial in my Creative Circle. Let's create together.</p>
+                        <div class="post-media single">
+                            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=280&fit=crop" alt="Fitness">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <button class="post-action" data-action="like"><i class="fa-regular fa-heart"></i> <span>6.2K</span></button>
+                        <button class="post-action" data-action="comment"><i class="fa-regular fa-comment"></i> <span>341</span></button>
+                        <button class="post-action" data-action="save"><i class="fa-regular fa-bookmark"></i> <span>3.4K</span></button>
+                        <button class="post-action" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
+                </div>
+
+                <!-- Post 5: Room Aesthetic -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Jasmine" class="post-avatar">
+                        <div class="post-author-info">
+                            <span class="post-author">Jordan Brooks</span>
+                            <span class="post-handle">@jordancreates · 12h ago</span>
+                        </div>
+                        <span class="post-badge verified"><i class="fa-solid fa-check"></i></span>
+                    </div>
+                    <div class="post-content">
+                        <p>Finally finished my creative corner setup! Everything is from thrift stores and Facebook Marketplace. Total spend: $127. Your dream space doesn't need a dream budget.</p>
+                        <div class="post-media">
+                            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=400&h=300&fit=crop" alt="Room">
+                            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop" alt="Room">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <button class="post-action" data-action="like"><i class="fa-regular fa-heart"></i> <span>4.8K</span></button>
+                        <button class="post-action" data-action="comment"><i class="fa-regular fa-comment"></i> <span>198</span></button>
+                        <button class="post-action" data-action="save"><i class="fa-regular fa-bookmark"></i> <span>5.6K</span></button>
+                        <button class="post-action" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
+                </div>
+
+                <!-- Post 6: Hair Transformation -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=60&h=60&fit=crop&crop=face" alt="Luna" class="post-avatar">
+                        <div class="post-author-info">
+                            <span class="post-author">Luna Reyes</span>
+                            <span class="post-handle">@lunacreates · 1d ago</span>
+                        </div>
+                        <span class="post-badge verified"><i class="fa-solid fa-check"></i></span>
+                    </div>
+                    <div class="post-content">
+                        <p>3 months of consistent creative practice and my skills are THRIVING. The secret? Patience, consistency, and stopping the comparison game. Your creative journey is a marathon, not a sprint.</p>
+                        <div class="post-media single">
+                            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=280&fit=crop" alt="Hair">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <button class="post-action" data-action="like"><i class="fa-regular fa-heart"></i> <span>8.1K</span></button>
+                        <button class="post-action" data-action="comment"><i class="fa-regular fa-comment"></i> <span>512</span></button>
+                        <button class="post-action" data-action="save"><i class="fa-regular fa-bookmark"></i> <span>4.3K</span></button>
+                        <button class="post-action" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Member Testimonials Section -->
+    <section class="member-testimonials">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-eyebrow">Real Stories</span>
+                <h2 class="section-title">People Who Found<br><span class="gradient-text">Their Inspiration</span></h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-glow"></div>
+                    <div class="testimonial-stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="testimonial-quote">"I moved to a new city and knew nobody. Pixera's Creative Circle became my support system. These people check on me, celebrate my wins, and hold me accountable. I've never felt less alone."</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=face" alt="Taylor">
+                        <div class="testimonial-author-info">
+                            <span class="testimonial-name">Taylor Williams</span>
+                            <span class="testimonial-title">Creative Circle · 1.5 yrs</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-metrics">
+                        <span><i class="fa-solid fa-heart"></i> 342</span>
+                        <span><i class="fa-solid fa-comment"></i> 56</span>
+                        <span><i class="fa-solid fa-share-nodes"></i> 89</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-glow"></div>
+                    <div class="testimonial-stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="testimonial-quote">"The anonymous creative talk feature saved me during a tough transition. Being able to share without judgment, get advice from people who've been there — it was support I didn't know I needed."</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face" alt="Mia">
+                        <div class="testimonial-author-info">
+                            <span class="testimonial-name">Mia Johnson</span>
+                            <span class="testimonial-title">Creative Diaries · 2 yrs</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-metrics">
+                        <span><i class="fa-solid fa-heart"></i> 518</span>
+                        <span><i class="fa-solid fa-comment"></i> 73</span>
+                        <span><i class="fa-solid fa-share-nodes"></i> 124</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-glow"></div>
+                    <div class="testimonial-stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="testimonial-quote">"I started a side hustle in the Lifestyle Lounge and now it's my full-time career. The connections I made here are worth more than any business course. This community genuinely wants to see you win."</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face" alt="Riley">
+                        <div class="testimonial-author-info">
+                            <span class="testimonial-name">Riley Park</span>
+                            <span class="testimonial-title">Lifestyle Lounge · 1 yr</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-metrics">
+                        <span><i class="fa-solid fa-heart"></i> 891</span>
+                        <span><i class="fa-solid fa-comment"></i> 112</span>
+                        <span><i class="fa-solid fa-share-nodes"></i> 267</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-glow"></div>
+                    <div class="testimonial-stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="testimonial-quote">"As a busy professional, I thought I'd lost my creative spark. The Creative Enthusiasts circle reminded me that self-expression isn't selfish. Now my friends see someone who prioritizes their passion — and that's the best inspiration I can share."</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face" alt="Danielle">
+                        <div class="testimonial-author-info">
+                            <span class="testimonial-name">Danielle Cruz</span>
+                            <span class="testimonial-title">Creative Enthusiasts · 8 mos</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-metrics">
+                        <span><i class="fa-solid fa-heart"></i> 1.2K</span>
+                        <span><i class="fa-solid fa-comment"></i> 89</span>
+                        <span><i class="fa-solid fa-share-nodes"></i> 156</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Guidelines / Values Section -->
+    <section class="community-values">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-eyebrow">Our Foundation</span>
+                <h2 class="section-title">The Creative<br><span class="gradient-text">Code</span></h2>
+                <p class="section-subtitle">
+                    These aren't just rules — they're the heartbeat of our community. Live by them, and watch yourself and others create.
+                </p>
+            </div>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon-wrap">
+                        <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <h3 class="value-title">Positivity</h3>
+                    <p class="value-desc">We lift each other up. Every comment, every share, every interaction is rooted in kindness and encouragement.</p>
+                    <div class="value-glow"></div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon-wrap">
+                        <i class="fa-solid fa-palette"></i>
+                    </div>
+                    <h3 class="value-title">Self-Expression</h3>
+                    <p class="value-desc">Your voice matters. Your style matters. Express yourself boldly, authentically, and without apology.</p>
+                    <div class="value-glow"></div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon-wrap">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <h3 class="value-title">Creativity</h3>
+                    <p class="value-desc">Innovation lives here. Share your collections, your routines, your art — inspire and be inspired.</p>
+                    <div class="value-glow"></div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon-wrap">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="value-title">Support</h3>
+                    <p class="value-desc">No creator works alone. We show up for each other — in the comments, in the DMs, in the hard moments.</p>
+                    <div class="value-glow"></div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon-wrap">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <h3 class="value-title">Confidence</h3>
+                    <p class="value-desc">Own your worth. Celebrate your wins. Walk into every room — digital or physical — like you belong there.</p>
+                    <div class="value-glow"></div>
+                </div>
+                <div class="value-card value-card-wide">
+                    <div class="value-icon-wrap">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="value-title">Safety First</h3>
+                    <p class="value-desc">This is a judgment-free zone. We have zero tolerance for hate, harassment, or negativity. Everyone deserves to feel safe being themselves. Our moderation team works around the clock to protect our community.</p>
+                    <div class="value-glow"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Banner -->
+    <section class="community-cta">
+        <div class="community-cta-bg">
+            <div class="cta-shape cta-shape-1"></div>
+            <div class="cta-shape cta-shape-2"></div>
+            <div class="cta-shape cta-shape-3"></div>
+            <div class="cta-shape cta-shape-4"></div>
+        </div>
+        <div class="community-cta-container">
+            <div class="community-cta-content">
+                <div class="community-cta-badge">
+                    <i class="fa-solid fa-sparkles"></i>
+                    <span>Your Circle Is Waiting</span>
+                </div>
+                <h2 class="community-cta-title">
+                    Ready to Find<br>
+                    <span class="gradient-text">Your People?</span>
+                </h2>
+                <p class="community-cta-subtitle">
+                    Join 2.4 million creators who are already building their inspiration tribe. No credit card required. Your community starts with one click.
+                </p>
+                <div class="community-cta-buttons">
+                    <a href="signup.html" class="btn btn-white btn-large">
+                        <i class="fa-solid fa-rocket"></i>
+                        Create Free Account
+                    </a>
+                    <a href="explore.html" class="btn btn-outline-white btn-large">
+                        <i class="fa-solid fa-compass"></i>
+                        Explore First
+                    </a>
+                </div>
+                <div class="community-cta-trust">
+                    <div class="trust-item">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Safe Space Guaranteed</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>Private Circles</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fa-solid fa-ban"></i>
+                        <span>No Ads, No Distractions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo footer-logo">
+                        <span class="logo-icon"><i class="fa-solid fa-sparkles"></i></span>
+                        <span class="logo-text">Pixera</span>
+                    </a>
+                    <p class="footer-tagline">
+                        The premium social network for women who refuse to settle. 
+                        Built with love in Los Angeles.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="#" class="social-link"><i class="fa-brands fa-pinterest"></i></a>
+                        <a href="#" class="social-link"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links-group">
+                    <h4 class="footer-heading">Platform</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Discover Fest</a></li>
+                        <li><a href="#">Vision Boards</a></li>
+                        <li><a href="#">Mood Journal</a></li>
+                        <li><a href="#">Creative Chats</a></li>
+                        <li><a href="#">Mobile App</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4 class="footer-heading">Community</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Creative Circles</a></li>
+                        <li><a href="#">Top Creators</a></li>
+                        <li><a href="#">Success Stories</a></li>
+                        <li><a href="#">Events & Meetups</a></li>
+                        <li><a href="#">Ambassador Program</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4 class="footer-heading">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press Kit</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4 class="footer-heading">Stay Inspired</h4>
+                    <p class="footer-newsletter-text">
+                        Get weekly inspiration tips, exclusive creator content, and early access to new features.
+                    </p>
+                    <form class="footer-form" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="your@email.com" class="footer-input">
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; 2026 Pixera Inc. All rights reserved.</p>
+                <div class="footer-badges">
+                    <span class="footer-badge"><i class="fa-brands fa-apple"></i> iOS App</span>
+                    <span class="footer-badge"><i class="fa-brands fa-android"></i> Android App</span>
+                    <span class="footer-badge"><i class="fa-solid fa-globe"></i> Web Platform</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login/Signup Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-container">
+            <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-content">
+                <div class="modal-icon">
+                    <i class="fa-solid fa-sparkles"></i>
+                </div>
+                <h3 class="modal-title">Join the Creative Community</h3>
+                <p class="modal-text">
+                    Create a free account to join Creative Circles, participate in discussions, follow creators, and unlock the full Pixera community experience.
+                </p>
+                <div class="modal-features">
+                    <div class="modal-feature">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Join Circles</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fa-solid fa-comment"></i>
+                        <span>Post & Comment</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <span>Follow Creators</span>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <a href="signup.html" class="btn btn-primary btn-full btn-large">
+                        <i class="fa-solid fa-rocket"></i>
+                        Create Free Account
+                    </a>
+                    <a href="login.html" class="btn btn-outline btn-full btn-large">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        Already a Member? Login
+                    </a>
+                </div>
+                <p class="modal-note">No credit card required. Cancel anytime.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Navigation Toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        mobileToggle.addEventListener('click', () => {
+            mobileToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        });
+
+        // Sticky Navbar Background
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    mobileToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                }
+            });
+        });
+
+        // Login Modal
+        const loginModal = document.getElementById('loginModal');
+        const modalClose = document.getElementById('modalClose');
+
+        function openModal() {
+            loginModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            loginModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        modalClose.addEventListener('click', closeModal);
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) closeModal();
+        });
+
+        // Join buttons trigger modal
+        document.querySelectorAll('.join-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal();
+            });
+        });
+
+        // Post actions trigger modal
+        document.querySelectorAll('.post-action').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal();
+            });
+        });
+
+        // Animated Counter
+        function animateCounter(el) {
+            const target = parseInt(el.dataset.count);
+            const duration = 2000;
+            const start = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(easeOut * target);
+
+                if (target >= 1000000) {
+                    el.textContent = (current / 1000000).toFixed(1) + 'M+';
+                } else if (target >= 1000) {
+                    el.textContent = (current / 1000).toFixed(0) + 'K+';
+                } else {
+                    el.textContent = current.toLocaleString();
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        // Intersection Observer for counters and animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Animate counters
+                    if (entry.target.classList.contains('stat-number')) {
+                        animateCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                    // Add animate-in class
+                    else {
+                        entry.target.classList.add('animate-in');
+                        observer.unobserve(entry.target);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-number').forEach(el => observer.observe(el));
+        document.querySelectorAll('.stat-card, .circle-card, .post-card, .testimonial-card, .value-card').forEach(el => observer.observe(el));
+    </script>
+    <script>
+        (function() {
+            'use strict';
+
+            const CONFIG = {
+                minDisplayTime: 1800,
+                progressInterval: 40,
+                fadeOutDuration: 800,
+                exitClassDelay: 200
+            };
+
+            let progress = 0;
+            let progressIntervalId = null;
+            let minTimerId = null;
+            let isReady = false;
+            let isMinTimeElapsed = false;
+
+            const preloader = document.getElementById('glowup-preloader');
+            const progressBar = document.getElementById('preloaderProgress');
+
+            function startProgress() {
+                progressIntervalId = setInterval(function() {
+                    const remaining = 100 - progress;
+                    const increment = Math.max(0.3, remaining * 0.015);
+                    progress = Math.min(100, progress + increment);
+
+                    if (progressBar) {
+                        progressBar.style.width = progress + '%';
+                    }
+
+                    if (progress >= 100) {
+                        clearInterval(progressIntervalId);
+                        checkReady();
+                    }
+                }, CONFIG.progressInterval);
+            }
+
+            function hidePreloader() {
+                if (!preloader) return;
+
+                preloader.classList.add('preloader-exiting');
+
+                setTimeout(function() {
+                    preloader.classList.add('preloader-hidden');
+
+                    setTimeout(function() {
+                        if (preloader && preloader.parentNode) {
+                            preloader.parentNode.removeChild(preloader);
+                        }
+                    }, CONFIG.fadeOutDuration + 100);
+                }, CONFIG.exitClassDelay);
+            }
+
+            function checkReady() {
+                if (isReady && isMinTimeElapsed && progress >= 100) {
+                    hidePreloader();
+                }
+            }
+
+            function onPageLoaded() {
+                isReady = true;
+                if (progressIntervalId) {
+                    clearInterval(progressIntervalId);
+                }
+                progress = 100;
+                if (progressBar) {
+                    progressBar.style.width = '100%';
+                }
+                checkReady();
+            }
+
+            function onMinTimeElapsed() {
+                isMinTimeElapsed = true;
+                checkReady();
+            }
+
+            function init() {
+                startProgress();
+                minTimerId = setTimeout(onMinTimeElapsed, CONFIG.minDisplayTime);
+
+                if (document.readyState === 'complete') {
+                    onPageLoaded();
+                } else {
+                    window.addEventListener('load', onPageLoaded);
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+</body>
+</html>

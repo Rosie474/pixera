@@ -1,0 +1,905 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>{{ profile_user.get_full_name }} — Pixera</title>
+    <link rel="stylesheet" href="{% static 'profile.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <base target="_blank">
+<base target="_blank">
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="top-navbar" id="topNavbar">
+        <div class="navbar-container">
+            <a href="{% url 'dashboard' %}" class="nav-logo" target="_self">
+                <img src="{% static 'pixeralogo1.png' %}"
+                    alt="Pixera"
+                    class="nav-logo-img">
+
+                <span class="nav-logo-text">Pixera</span>
+            </a>
+
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-input" placeholder="Discover Fest — Search fashion, wellness, mood boards...">
+                <button class="search-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+            <div class="nav-actions">
+                <button class="nav-action-btn" id="notifBtn" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge">5</span>
+                </button>
+                <a href="{% url "createpost2" %}" target="_self">
+                    <button class="nav-action-btn create-post-btn" id="createPostBtn">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Create</span>
+                    </button>
+                </a>
+                <div class="nav-profile">
+                    {% if user.profile.profile_picture %}
+                        <img src="{{ user.profile.profile_picture.url }}" alt="Profile" class="nav-avatar">
+                    {% else %}
+                        <img src="/static/default.jpg" alt="profile" class="nav-avatar">
+                    {% endif %}
+                    <div class="profile-dropdown">
+                        <a href="{% url "profile" %}" target="_self"><i class="fa-regular fa-profile_user"></i> Profile</a>
+                        <a href="{% url "settings" %}" target="_self"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <a href="{% url "logout" %}" target="_self"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a>
+                    </div>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Layout -->
+    <div class="dashboard-layout profile-layout">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar" id="leftSidebar">
+            <div class="sidebar-inner">
+                <nav class="sidebar-nav">
+                    <a href="{% url "dashboard" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-house"></i></span>
+                        <span class="sidebar-label">Home</span>
+                    </a>
+                    <a href="{% url "discover" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-compass"></i></span>
+                        <span class="sidebar-label">Explore</span>
+                    </a>
+                    <a href="{% url "boards" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-palette"></i></span>
+                        <span class="sidebar-label">Boards</span>
+                    </a>
+                    <a href="{% url "messages" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-regular fa-comment-dots"></i></span>
+                        <span class="sidebar-label">Messages</span>
+                        <span class="sidebar-badge" id="sidebarUnreadBadge">{{ unread_count }}0</span>
+                    </a>
+                    <a href="{% url "profile" %}" class="sidebar-link active" target="_self">
+                        <span class="sidebar-icon"><i class="fa-regular fa-profile_user"></i></span>
+                        <span class="sidebar-label">Profile</span>
+                    </a>
+                    <a href="{% url "settings" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-gear"></i></span>
+                        <span class="sidebar-label">Settings</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="mood-tracker-mini">
+                        <span class="mood-label">Today's Mood</span>
+                        <div class="mood-options">
+                            <button class="mood-btn mood-happy active" title="Happy"><i class="fa-solid fa-face-smile"></i></button>
+                            <button class="mood-btn mood-calm" title="Calm"><i class="fa-solid fa-face-meh"></i></button>
+                            <button class="mood-btn mood-excited" title="Excited"><i class="fa-solid fa-face-laugh-beam"></i></button>
+                            <button class="mood-btn mood-sad" title="Reflective"><i class="fa-solid fa-face-frown"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center Profile Content -->
+        <main class="center-feed profile-main" id="centerFeed">
+
+            <!-- Profile Hero Section -->
+            <section class="profile-hero">
+                <div class="profile-cover">
+                    <img src="{% static 'pawel-czerwinski-fcZU7mRWImY-unsplash.jpg' %}" alt="Cover" class="cover-image">
+                    <div class="cover-overlay"></div>
+                    <div class="cover-shine"></div>
+                </div>
+
+                <div class="profile-hero-content">
+                    <div class="profile-avatar-wrap">
+                        <div class="profile-avatar-ring">
+                    {% if profile_user.profile.profile_picture %}
+                        <img src="{{ profile_user.profile.profile_picture.url }}"  alt="Elena Rose" class="profile-avatar-img">
+                    {% else %}
+                        <img src="/static/default.jpg" alt="Elena Rose" class="profile-avatar-img">
+                    {% endif %}
+                        <div class="profile-status-dot online"></div>
+                        </div>
+                    </div>
+
+                    <div class="profile-info">
+                        <div class="profile-name-row">
+                            {% if profile_user.is_authenticated %}
+                            
+                            <h1 class="profile-name">{{ profile_user.get_full_name }}</h1>
+                            <p class="profile-handle">@{{ profile_user.username }}</p>
+                        </div>
+                        <p class="profile-bio">{{ profile_user.profile.bio }}</p>
+                        
+                        <div class="profile-meta">
+                            {% comment %} <span class="meta-item"><i class="fa-solid fa-location-dot"></i> New York, NY</span> {% endcomment %}
+                            <span class="meta-item"><i class="fa-solid fa-link"></i> {{profile_user.username}}.com</span>
+                            <span class="meta-item"><i class="fa-regular fa-calendar"></i> Joined {{ profile_user.date_joined|date:"F d, Y" }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="profile-actions">
+                        {% if request.user == profile_user %}
+                        <button class="profile-btn primary" id="editProfileBtn">
+                                <a href="{% url 'settings' %}">
+                                    Edit Profile
+                                </a>
+                            {% else %}
+                                    {% if request.user != profile_user %}
+
+                                       <button
+                                            class= "profile-btn primary"
+                                            id="follow-btn"
+                                            data-username="{{ profile_user.username }}"
+                                        >
+                                            {% if is_following %}
+                                                Unfollow
+                                            {% else %}
+                                                Follow
+                                            {% endif %}
+                                        </button>
+
+                                    {% endif %}
+                            {% endif %}
+                        </button>
+                        <button class="profile-btn secondary" id="shareProfileBtn">
+                            <i class="fa-solid fa-share-nodes"></i>
+                            Share
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Bar -->
+            <section class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-value">{{ user_posts.count }}</span>
+                    <span class="stat-label">Posts</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-value" id="followers-count">{{ followers_count }}</span>
+                    <span class="stat-label">Followers</span>
+                </div>
+                <div class="stat-divider" id="followers-count"></div>
+                <div class="stat-item">
+                    <span class="stat-value">{{ following_count }}</span>
+                    <span class="stat-label">Following</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item glow-stat">
+                    <span class="stat-value">
+                        <i class="fa-solid fa-bolt"></i>
+                        {{ glow_score }}
+                    </span>
+                    <span class="stat-label">Glow Score</span>
+                </div>
+            </section>
+
+
+            <!-- Content Tabs -->
+            <div class="profile-content-tabs">
+                <button class="content-tab active" data-tab="posts">
+                    <i class="fa-solid fa-grid-2"></i>
+                    <span>Posts</span>
+                </button>
+                {% if request.user == profile_user %}
+                    <button class="content-tab" data-tab="saved">
+                        <i class="fa-solid fa-bookmark"></i>
+                        <span>Saved</span>
+                    </button>
+                    <button class="content-tab" data-tab="tagged">
+                        <i class="fa-solid fa-tag"></i>
+                        <span>Tagged</span>
+                    </button>
+                    <button class="content-tab" data-tab="boards">
+                        <i class="fa-solid fa-palette"></i>
+                        <span>Boards</span>
+                    </button>
+                {% else %}
+                {% endif %}
+            </div>
+
+            <!-- Posts Gallery Section -->
+            <section class="profile-content-section active" id="content-posts">
+                <div class="my-posts-grid">
+
+                    {% for post in user_posts %}
+
+                    <article class="profile-post-card">
+
+                        <!-- IMAGE -->
+                        {% if post.image %}
+                        <div class="profile-post-media">
+                            <img src="{{ post.image.url }}" alt="">
+                        </div>
+                        {% endif %}
+
+                        <!-- CONTENT -->
+                        <div class="profile-post-content">
+
+                            <!-- PROFILE_USER -->
+                            <div class="profile-post-user">
+
+                                {% if profile_user.profile.profile_picture %}
+                                    <img src="{{ profile_user.profile.profile_picture.url }}" class="profile-post-avatar">
+                                {% else %}
+                                    <img src="{% static 'default.jpg' %}" class="profile-post-avatar">
+                                {% endif %}
+
+                                <div>
+                                    <h4>{{ post.user.username }}</h4>
+                                            <span class="card-time">{{ post.created_at|naturaltime }} •       
+                                                <div class="post-type-badge">
+                                                    {% if post.post_type == "image-inspiration" %}
+                                                        <i class="fa-solid fa-image"></i> Image Inspiration
+                                                    {% elif post.post_type == "mood-journal" %}
+                                                        <i class="fa-solid fa-book-open"></i> Mood Journal
+                                                    {% elif post.post_type == "beauty-tip" %}
+                                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Beauty Tip
+                                                    {% elif post.post_type == "anonymous-girl-talk" %}
+                                                        <i class="fa-solid fa-profile_user-secret"></i> Girl Talk
+                                                    {% endif %}
+                                                </div>
+                                            </span>
+                                </div>
+
+                            </div>
+
+                            <!-- CAPTION -->
+                            <p class="profile-post-caption">
+                                {{ post.caption }}
+                            </p>
+
+                            <!-- STATS -->
+                            <div class="profile-post-stats">
+
+                                <div class="profile-post-stat">
+                                    <i class="fa-solid fa-heart"></i>
+                                    <span>{{ post.likes.count }}</span>
+                                </div>
+
+                                <div class="profile-post-stat">
+                                    <i class="fa-solid fa-comment"></i>
+                                    <span>{{ post.comments.count }}</span>
+                                </div>
+
+                                <div class="profile-post-stat">
+                                    <i class="fa-solid fa-bookmark"></i>
+                                    <span>{{ post.bookmarks.count }}</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        {% if post.user == user %}
+                            <button class="delete-post-btn" data-id="{{ post.id }}">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        {% endif %}
+
+                    </article>
+
+                    {% empty %}
+
+                    <div class="empty-posts">
+                        <i class="fa-regular fa-image"></i>
+                        <h2>No posts yet</h2>
+                        <p>Make a post</p>
+                    </div>
+
+
+                    {% endfor %}
+
+                </div>
+            </section>
+
+            <!-- Saved Boards Section -->
+            <section class="profile-content-section" id="content-saved">
+                <div class="saved-posts-grid">
+
+
+                    {% for post in saved_posts %}
+
+                        <article class="saved-post-card">
+
+                            <!-- IMAGE -->
+                            {% if post.image %}
+                                <div class="saved-post-media">
+                                    <img src="{{ post.image.url }}" alt="">
+                                </div>
+                            {% endif %}
+
+                            <!-- CONTENT -->
+                            <div class="saved-post-content">
+
+                                <div class="saved-post-top">
+
+                                    {% if post.profile_user.profile.profile_picture %}
+                                        <img src="{{ post.profile_user.profile.profile_picture.url }}"
+                                            class="saved-avatar">
+                                    {% else %}
+                                        <img src="{% static 'default.jpg' %}"
+                                            class="saved-avatar">
+                                    {% endif %}
+
+                                   
+                                    <div class="saved-profile_user-info">
+                                        <h4>{{ post.user.profile_username }}</h4>
+                                                <span class="card-time">{{ post.created_at|naturaltime }} •       
+                                                    <div class="post-type-badge">
+                                                        {% if post.post_type == "image-inspiration" %}
+                                                            <i class="fa-solid fa-image"></i> Image Inspiration
+                                                        {% elif post.post_type == "mood-journal" %}
+                                                            <i class="fa-solid fa-book-open"></i> Mood Journal
+                                                        {% elif post.post_type == "beauty-tip" %}
+                                                            <i class="fa-solid fa-wand-magic-sparkles"></i> Beauty Tip
+                                                        {% elif post.post_type == "anonymous-girl-talk" %}
+                                                            <i class="fa-solid fa-profile_user-secret"></i> Girl Talk
+                                                        {% endif %}
+                                                    </div>
+                                                </span>
+                                    </div>
+
+
+                                </div>
+
+                                <!-- CAPTION -->
+                                <p class="saved-caption">
+                                    {{ post.caption|truncatewords:18 }}
+                                </p>
+
+                                <!-- STATS -->
+                                <div class="saved-post-stats">
+
+                                    <span>
+                                        <i class="fa-regular fa-heart"></i>
+                                        {{ post.likes.count }}
+                                    </span>
+
+                                    <span>
+                                        <i class="fa-regular fa-comment"></i>
+                                        {{ post.comments.count }}
+                                    </span>
+
+                                    <span>
+                                        <i class="fa-regular fa-bookmark"></i>
+                                        {{ post.bookmark_set.count }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    {% empty %}
+
+                        <div class="empty-saved">
+                            <i class="fa-regular fa-bookmark"></i>
+                            <h3>No saved posts yet</h3>
+                            <p>Posts you bookmark will appear here.</p>
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+                {% comment %} <div class="boards-grid">
+                    {% for post in saved_posts %}
+                    <div class="board-card featured">
+                        <div class="board-image-wrap">
+                                {% if post.image %}
+                                    <img src="{{ post.image.url }}">
+                                {% endif %}
+                            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=400&fit=crop" alt="Board" class="board-image">
+                        </div>
+                        <div class="board-info">
+                            <h3 class="board-name">Spring Capsule 2026</h3>
+                            <p class="board-desc">Pastel blazers, linen sets, and floral accents</p>
+                        </div>
+                    </div>
+
+                    <div class="saved-posts-grid">
+
+                        {% for post in saved_posts %}
+
+                            <div class="saved-post-card">
+
+                                {% if post.image %}
+                                    <img src="{{ post.image.url }}">
+                                {% endif %}
+
+                            </div>
+
+                        {% empty %}
+
+                            <p>No saved posts yet</p>
+
+                        {% endfor %}
+
+                    </div>
+
+                    <div class="board-card create-board">
+                        <div class="create-board-inner">
+                            <div class="create-board-icon">
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                            <span class="create-board-text">Create New Board</span>
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+            </section>
+
+            <!-- Tagged Section -->
+            <section class="profile-content-section" id="content-tagged">
+                <div class="tagged-placeholder">
+                    <div class="placeholder-icon">
+                        <i class="fa-solid fa-tag"></i>
+                    </div>
+                    <h3 class="placeholder-title">No Tagged Posts Yet</h3>
+                    <p class="placeholder-desc">When people tag you in posts, they'll appear here.</p>
+                </div>
+            </section>
+
+            <!-- Boards Section -->
+            <section class="profile-content-section" id="content-boards">
+                <div class="boards-grid">
+                    <div class="board-card large">
+                        <div class="board-image-wrap">
+                            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=400&fit=crop" alt="Board" class="board-image">
+                            <div class="board-overlay">
+                                <span class="board-pin-count">87 pins</span>
+                            </div>
+                        </div>
+                        <div class="board-info">
+                            <h3 class="board-name">Vision Board 2026</h3>
+                            <p class="board-desc">Manifesting goals, dreams, and glow-ups</p>
+                        </div>
+                    </div>
+
+                    <div class="board-card large">
+                        <div class="board-image-wrap">
+                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=400&fit=crop" alt="Board" class="board-image">
+                            <div class="board-overlay">
+                                <span class="board-pin-count">63 pins</span>
+                            </div>
+                        </div>
+                        <div class="board-info">
+                            <h3 class="board-name">Fitness Journey</h3>
+                            <p class="board-desc">Workouts, progress, and healthy habits</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar" id="rightSidebar">
+            <div class="sidebar-inner">
+                <!-- About Card -->
+               <div class="sidebar-card about-card">
+                    <h3 class="sidebar-title">
+                        <i class="fa-solid fa-circle-info"></i>
+                        About
+                    </h3>
+
+                    <div class="about-content">
+                        <p class="about-text">
+                            {{ profile_user.profile.bio }}
+                        </p>
+
+                        <div class="about-details">
+
+                            <div class="about-detail">
+                                <i class="fa-solid fa-calendar"></i>
+                                <span>
+                                    Joined {{ profile_user.date_joined|date:"F Y" }}
+                                </span>
+                            </div>
+
+                            <div class="about-detail">
+                                <i class="fa-solid fa-image"></i>
+                                <span>
+                                    {{ user_posts.count }} Posts
+                                </span>
+                            </div>
+
+                            <div class="about-detail">
+                                <i class="fa-solid fa-users"></i>
+                                <span>
+                                    {{ followers_count }} Followers
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Top Interests -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">
+                        <i class="fa-solid fa-chart-simple"></i>
+                        Profile Stats
+                    </h3>
+
+                    <div class="about-details">
+
+                        <div class="about-detail">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <span>{{ following_count }} Following</span>
+                        </div>
+
+                        <div class="about-detail">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>{{ glow_score }} Glow Score</span>
+                        </div>
+
+                    </div>
+                </div>
+
+             </div>
+        </aside>
+    </div>
+
+        <div id="deleteModal" class="modal-overlay" style="display:none;">
+            <div class="modal-box">
+
+                <h3>Delete Post?</h3>
+                <p>This action cannot be undone.</p>
+
+                <div class="modal-actions">
+                    <button id="cancelDelete" class="btn-cancel">Cancel</button>
+                    <button id="confirmDelete" class="btn-delete">Delete</button>
+                </div>
+
+            </div>
+        </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-bottom-nav" id="mobileBottomNav">
+        <a href="{% url 'dashboard' %}" class="mobile-nav-link" target="_self">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="{% url 'discover' %}" class="mobile-nav-link" target="_self">
+            <i class="fa-solid fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <button class="mobile-create-btn" id="mobileCreateBtn">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+        <a href="{% url 'messages' %}" class="mobile-nav-link" target="_self">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span>Chat</span>
+        </a>
+        <a href="{% url 'profile' %}" class="mobile-nav-link active" target="_self">
+            <i class="fa-regular fa-profile_user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const leftSidebar = document.getElementById('leftSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const topNavbar = document.getElementById('topNavbar');
+
+        function openSidebar() {
+            leftSidebar.classList.add('mobile-open');
+            mobileMenuToggle.classList.add('active');
+            document.body.classList.add('sidebar-open');
+            if (sidebarOverlay) sidebarOverlay.classList.add('active');
+        }
+
+        function closeSidebar() {
+            leftSidebar.classList.remove('mobile-open');
+            mobileMenuToggle.classList.remove('active');
+            document.body.classList.remove('sidebar-open');
+            if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+        }
+
+        mobileMenuToggle.addEventListener('click', () => {
+            if (leftSidebar.classList.contains('mobile-open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeSidebar);
+        }
+
+        document.addEventListener('click', (e) => {
+            if (leftSidebar.classList.contains('mobile-open') && 
+                !leftSidebar.contains(e.target) && 
+                !mobileMenuToggle.contains(e.target)) {
+                closeSidebar();
+            }
+        });
+
+        // Profile dropdown
+        const navProfile = document.querySelector('.nav-profile');
+        navProfile.addEventListener('click', () => {
+            navProfile.classList.toggle('dropdown-open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!navProfile.contains(e.target)) {
+                navProfile.classList.remove('dropdown-open');
+            }
+        });
+
+        // Navbar scroll behavior
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 100) {
+                topNavbar.classList.add('scrolled');
+            } else {
+                topNavbar.classList.remove('scrolled');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // Mood tracker
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Profile content tabs
+        const contentTabs = document.querySelectorAll('.content-tab');
+        const contentSections = document.querySelectorAll('.profile-content-section');
+
+        contentTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                contentTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === 'content-' + targetTab) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Affirmation save
+        const affirmationSave = document.getElementById('affirmationSave');
+        if (affirmationSave) {
+            affirmationSave.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-regular');
+                icon.classList.toggle('fa-solid');
+                this.style.color = icon.classList.contains('fa-solid') ? 'var(--electric-pink)' : '';
+            });
+        }
+
+        // Edit profile button
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        if (editProfileBtn) {
+            editProfileBtn.addEventListener('click', () => {
+                window.location.href = '{% url "settings" %}';
+            });
+        }
+
+        // Share profile button
+        const shareProfileBtn = document.getElementById('shareProfileBtn');
+        if (shareProfileBtn) {
+            shareProfileBtn.addEventListener('click', () => {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Elena Rose on Pixera',
+                        text: 'Check out my Pixera profile!',
+                        url: window.location.href
+                    });
+                } else {
+                    alert('Profile link copied to clipboard!');
+                }
+            });
+        }
+
+        // Post card hover effects
+        document.querySelectorAll('.post-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-6px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Board card hover
+        document.querySelectorAll('.board-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                if (!this.classList.contains('create-board')) {
+                    const img = this.querySelector('.board-image');
+                    if (img) img.style.transform = 'scale(1.08)';
+                }
+            });
+            card.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('create-board')) {
+                    const img = this.querySelector('.board-image');
+                    if (img) img.style.transform = 'scale(1)';
+                }
+            });
+        });
+
+        // Create board card
+        const createBoardCard = document.querySelector('.create-board');
+        if (createBoardCard) {
+            createBoardCard.addEventListener('click', () => {
+                alert('Create Board modal would open here');
+            });
+        }
+
+        //CONFIRMATION MODAL
+
+            let postToDelete = null;
+
+            const modal = document.getElementById("deleteModal");
+            const cancelBtn = document.getElementById("cancelDelete");
+            const confirmBtn = document.getElementById("confirmDelete");
+
+            // OPEN MODAL
+            document.addEventListener("click", function(e){
+
+                const btn = e.target.closest(".delete-post-btn");
+                if (!btn) return;
+
+                postToDelete = btn.closest(".profile-post-card");
+                postToDelete.dataset.id = btn.dataset.id;
+
+                modal.style.display = "flex";
+            });
+
+            // CANCEL
+            cancelBtn.addEventListener("click", () => {
+                modal.style.display = "none";
+                postToDelete = null;
+            });
+
+            // CONFIRM DELETE
+            confirmBtn.addEventListener("click", async () => {
+
+                if (!postToDelete) return;
+
+                const postId = postToDelete.dataset.id;
+
+                const res = await fetch(`/post/delete/${postId}/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrftoken,
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+
+                    postToDelete.style.transition = "0.3s";
+                    postToDelete.style.opacity = "0";
+                    postToDelete.style.transform = "scale(0.9)";
+
+                    setTimeout(() => {
+                        postToDelete.remove();
+                    }, 300);
+                }
+
+                modal.style.display = "none";
+                postToDelete = null;
+            });
+
+            // CLOSE ON BACKDROP CLICK
+            modal.addEventListener("click", (e) => {
+                if (e.target === modal) {
+                    modal.style.display = "none";
+                    postToDelete = null;
+                }
+            });
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            const csrftoken = getCookie('csrftoken');
+
+
+            const followBtn = document.getElementById("follow-btn");
+
+            if (followBtn) {
+                followBtn.addEventListener("click", function () {
+
+                    const username = this.dataset.username;
+
+                    fetch(`/follow/${username}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        if (data.following) {
+                            followBtn.textContent = "Unfollow";
+                        } else {
+                            followBtn.textContent = "Follow";
+                        }
+
+                        document.getElementById("followers-count").textContent =
+                            data.followers_count;
+                    });
+                });
+            }
+
+        const sidebarBadge = document.getElementById("sidebarUnreadBadge");
+
+        const notifSocket = new WebSocket(
+            "ws://" + window.location.host + "/ws/notifications/"
+        );
+
+        notifSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+
+            if (sidebarBadge) {
+                sidebarBadge.innerText = Number(sidebarBadge.innerText || 0) + 1;
+            }
+        };
+    </script>
+</body>
+</html>

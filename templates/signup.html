@@ -1,0 +1,514 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account — Pixera</title>
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+        <div class="ambient-shape ambient-shape-1"></div>
+        <div class="ambient-shape ambient-shape-2"></div>
+        <div class="ambient-shape ambient-shape-3"></div>
+        <div class="ambient-shape ambient-shape-4"></div>
+        <div class="ambient-shape ambient-shape-5"></div>
+    </div>
+
+    <div class="signup-page">
+        <!-- Left Visual Panel -->
+        <aside class="visual-panel">
+            <div class="visual-panel-inner">
+                <div class="visual-overlay"></div>
+                <div class="visual-content">
+                    <div class="visual-badge">
+                        <span class="badge-pulse"></span>
+                        <span>2.4M+ Creators Growing Together</span>
+                    </div>
+                    <h2 class="visual-headline">Join the movement.<br>Start your<br><span class="visual-gradient">creative era.</span></h2>
+                    <p class="visual-body">Build your collections, track your ideas, connect with creators, and curate the inspiration you deserve. Your creative journey starts with one click.</p>
+                    <div class="visual-testimonial">
+                        <div class="testimonial-avatars">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=face" alt="">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face" alt="">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face" alt="">
+                            <div class="avatar-more">+2.4K</div>
+                        </div>
+                        <div class="testimonial-rating">
+                            <div class="stars">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <span class="rating-text">4.9 on App Store</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="visual-floating-card visual-card-1">
+                    <div class="vfc-icon"><i class="fa-solid fa-heart"></i></div>
+                    <div class="vfc-body">
+                        <span class="vfc-number">12.4K</span>
+                        <span class="vfc-label">Likes today</span>
+                    </div>
+                </div>
+                <div class="visual-floating-card visual-card-2">
+                    <div class="vfc-icon vfc-icon-fire"><i class="fa-solid fa-fire"></i></div>
+                    <div class="vfc-body">
+                        <span class="vfc-number">30 Days</span>
+                        <span class="vfc-label">Inspiration streak</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Auth Panel -->
+        <main class="auth-panel">
+            <div class="auth-panel-inner">
+                <!-- Logo -->
+                <a href="{% url 'index' %}" class="nav-logo" target="_self">
+                    <img src="{% static 'pixeralogo1.png' %}"
+                        alt="Pixera"
+                        class="nav-logo-img">
+
+                    <span class="nav-logo-text">Pixera</span>
+                </a>
+
+                <!-- Header -->
+                <div class="auth-header">
+                    <h1 class="auth-title">Create Your Account</h1>
+                    <p class="auth-subtitle">Set up your profile in under 60 seconds and join the most inspiring community of passionate creators.</p>
+                </div>
+
+                
+                <!-- Form -->
+                <form class="auth-form" enctype="multipart/form-data" method= 'POST' action = '{% url "signup" %}' id="signupForm" novalidate > 
+                    {% csrf_token %}
+                    <!-- Profile Photo Upload -->
+                    <div class="photo-upload-section">
+                        <div class="photo-upload-wrap" id="photoUploadWrap">
+                            <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*" class="photo-input">
+                            <div class="photo-preview" id="photoPreview">
+                                <div class="photo-placeholder">
+                                    <i class="fa-solid fa-camera"></i>
+                                    <span>Add Photo</span>
+                                </div>
+                                <img src="" alt="Preview" class="photo-img" id="photoImg">
+                            </div>
+                            <div class="photo-hover-overlay">
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                                <span>Change Photo</span>
+                            </div>
+                        </div>
+                        <span class="photo-hint">Upload a profile photo (optional)</span>
+                    </div>
+                    <div class="form-row-grid">
+                        <div class="form-group">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <div class="input-wrap">
+                                <span class="input-icon"><i class="fa-regular fa-user"></i></span>
+                                <input 
+                                    type="text" 
+                                    id="fullName" 
+                                    name="full_name" 
+                                    class="form-input" 
+                                    placeholder="Alex Mitchell"
+                                    autocomplete="name"
+                                    required
+                                >
+                            </div>
+                            <span class="form-error" id="fullNameError">Please enter your full name.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username" class="form-label">Username</label>
+                            <div class="input-wrap">
+                                <span class="input-icon"><i class="fa-solid fa-at"></i></span>
+                                <input 
+                                    type="text" 
+                                    id="username" 
+                                    name="username" 
+                                    class="form-input" 
+                                    placeholder="alexcreates"
+                                    autocomplete="username"
+                                    required
+                                >
+                            </div>
+                            <span class="form-error" id="usernameError">Username must be 3–20 characters, letters and numbers only.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <div class="input-wrap">
+                            <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                class="form-input" 
+                                placeholder="hello@pixera.com"
+                                autocomplete="email"
+                                required
+                            >
+                        </div>
+                        <span class="form-error" id="emailError">Please enter a valid email address.</span>
+                    </div>
+
+                    <div class="form-row-grid">
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-wrap">
+                                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                                <input 
+                                    type="password" 
+                                    id="password" 
+                                    name="password1" 
+                                    class="form-input" 
+                                    placeholder="Min. 8 characters"
+                                    autocomplete="new-password"
+                                    required
+                                >
+                                <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">
+                                    <i class="fa-regular fa-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                            <div class="password-strength" id="passwordStrength">
+                                <div class="strength-bar">
+                                    <div class="strength-fill" id="strengthFill"></div>
+                                </div>
+                                <span class="strength-text" id="strengthText">Enter a password</span>
+                            </div>
+                            <span class="form-error" id="passwordError">Password must be at least 8 characters with a number and symbol.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword" class="form-label">Confirm Password</label>
+                            <div class="input-wrap">
+                                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                                <input 
+                                    type="password" 
+                                    id="confirmPassword" 
+                                    name="password2" 
+                                    class="form-input" 
+                                    placeholder="Re-enter password"
+                                    autocomplete="new-password"
+                                    required
+                                >
+                            </div>
+                            {% for message in messages %}<p class="form-error">{{ message }}</p>{% endfor %}
+                            {% comment %} <span class="form-error" id="confirmPasswordError">Passwords do not match.</span> {% endcomment %}
+                        </div>
+                    </div>
+
+                    <!-- Interest Selection -->
+                    <div class="interests-section">
+                        <label class="form-label">What are you into? <span class="label-hint">Select at least 3</span></label>
+                        <div class="interests-grid" id="interestsGrid">
+                            <button type="button" class="interest-card" data-interest="fashion">
+                                <span class="interest-icon"><i class="fa-solid fa-shirt"></i></span>
+                                <span class="interest-name">Fashion</span>
+                                <span class="interest-check"><i class="fa-solid fa-check"></i></span>
+                            </button>
+                            <button type="button" class="interest-card" data-interest="hair">
+                                <span class="interest-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                                <span class="interest-name">Hair</span>
+                                <span class="interest-check"><i class="fa-solid fa-check"></i></span>
+                            </button>
+                            <button type="button" class="interest-card" data-interest="skin">
+                                <span class="interest-icon"><i class="fa-solid fa-droplet"></i></span>
+                                <span class="interest-name">Skin</span>
+                                <span class="interest-check"><i class="fa-solid fa-check"></i></span>
+                            </button>
+                            <button type="button" class="interest-card" data-interest="wellness">
+                                <span class="interest-icon"><i class="fa-solid fa-spa"></i></span>
+                                <span class="interest-name">Wellness</span>
+                                <span class="interest-check"><i class="fa-solid fa-check"></i></span>
+                            </button>
+                            <button type="button" class="interest-card" data-interest="nails">
+                                <span class="interest-icon"><i class="fa-solid fa-hand-sparkles"></i></span>
+                                <span class="interest-name">Nails</span>
+                                <span class="interest-check"><i class="fa-solid fa-check"></i></span>
+                            </button>
+                            <button type="button" class="interest-card" data-interest="fitness">
+                                <span class="interest-icon"><i class="fa-solid fa-dumbbell"></i></span>
+                                <span class="interest-name">Fitness</span>
+                                <span class="interest-check"><i class="fa-solid fa-check"></i></span>
+                            </button>
+                            <button type="button" class="interest-card" data-interest="journaling">
+                                <span class="interest-icon"><i class="fa-solid fa-book-open"></i></span>
+                                <span class="interest-name">Journaling</span>
+                                <span class="interest-check"><i class="fa-solid fa-check"></i></span>
+                            </button>
+                        </div>
+                        <input type="hidden" name="interests" id="interestsInput" required>
+                        <span class="form-error" id="interestsError">Please select at least 3 interests.</span>
+                    </div>
+
+                    <button type="submit" class="btn-signup" id="signupBtn">
+                        <span class="btn-text">Create My Account</span>
+                        <span class="btn-loader">
+                            <svg class="spinner" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="31.4 31.4" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                    </button>
+                </form>
+
+                <!-- Login Redirect -->
+                <p class="login-redirect">
+                    Already have an account? <a href="{% url "login" %}" class="login-link">Sign in</a>
+                </p>
+
+                <!-- Trust Footer -->
+                <div class="auth-trust">
+                    <div class="trust-item">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Secure Signup</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>256-bit SSL</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <span>Private Data</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Profile Photo Upload
+        const photoWrap = document.getElementById('photoUploadWrap');
+        const photoInput = document.getElementById('profilePhoto');
+        const photoImg = document.getElementById('photoImg');
+        const photoPreview = document.getElementById('photoPreview');
+
+        photoWrap.addEventListener('click', () => photoInput.click());
+
+        photoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    photoImg.src = e.target.result;
+                    photoPreview.classList.add('has-image');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Password Visibility Toggle
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            toggleIcon.classList.toggle('fa-eye');
+            toggleIcon.classList.toggle('fa-eye-slash');
+        });
+
+        // Password Strength Meter
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+
+        function getPasswordStrength(password) {
+            let score = 0;
+            if (password.length >= 8) score++;
+            if (password.length >= 12) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[^A-Za-z0-9]/.test(password)) score++;
+            return score;
+        }
+
+        passwordInput.addEventListener('input', () => {
+            const val = passwordInput.value;
+            const score = getPasswordStrength(val);
+            const strengthBar = document.getElementById('passwordStrength');
+
+            if (val.length === 0) {
+                strengthBar.classList.remove('visible');
+                return;
+            }
+            strengthBar.classList.add('visible');
+
+            const widths = ['0%', '20%', '40%', '60%', '80%', '100%'];
+            const colors = ['', '#ff4444', '#ff8844', '#ffaa44', '#44bb44', '#22aa22'];
+            const labels = ['Too weak', 'Weak', 'Fair', 'Good', 'Strong', 'Excellent'];
+
+            strengthFill.style.width = widths[score];
+            strengthFill.style.background = colors[score];
+            strengthText.textContent = labels[score];
+            strengthText.style.color = colors[score];
+        });
+
+        // Interest Selection
+        const interestCards = document.querySelectorAll('.interest-card');
+        const interestsInput = document.getElementById('interestsInput');
+        const interestsError = document.getElementById('interestsError');
+        let selectedInterests = [];
+
+        interestCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const interest = card.dataset.interest;
+
+                if (selectedInterests.includes(interest)) {
+                    selectedInterests = selectedInterests.filter(i => i !== interest);
+                    card.classList.remove('selected');
+                } else {
+                    selectedInterests.push(interest);
+                    card.classList.add('selected');
+                }
+
+                interestsInput.value = selectedInterests.join(',');
+
+                if (selectedInterests.length >= 3) {
+                    interestsError.style.display = 'none';
+                }
+            });
+        });
+
+        // Form Validation
+        const signupForm = document.getElementById('signupForm');
+        const fullNameInput = document.getElementById('fullName');
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const signupBtn = document.getElementById('signupBtn');
+
+        function showError(input, errorId, show) {
+            const wrap = input.closest('.form-group');
+            const errorEl = document.getElementById(errorId);
+            if (show) {
+                wrap.classList.add('has-error');
+                errorEl.style.display = 'block';
+            } else {
+                wrap.classList.remove('has-error');
+                errorEl.style.display = 'none';
+            }
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function isValidUsername(username) {
+            return /^[a-zA-Z0-9_]{3,20}$/.test(username);
+        }
+
+        fullNameInput.addEventListener('blur', () => {
+            showError(fullNameInput, 'fullNameError', fullNameInput.value.trim().length < 2);
+        });
+        fullNameInput.addEventListener('input', () => showError(fullNameInput, 'fullNameError', false));
+
+        usernameInput.addEventListener('blur', () => {
+            showError(usernameInput, 'usernameError', !isValidUsername(usernameInput.value));
+        });
+        usernameInput.addEventListener('input', () => showError(usernameInput, 'usernameError', false));
+
+        emailInput.addEventListener('blur', () => {
+            showError(emailInput, 'emailError', emailInput.value && !isValidEmail(emailInput.value));
+        });
+        emailInput.addEventListener('input', () => showError(emailInput, 'emailError', false));
+
+        passwordInput.addEventListener('input', () => showError(passwordInput, 'passwordError', false));
+        confirmPasswordInput.addEventListener('input', () => showError(confirmPasswordInput, 'confirmPasswordError', false));
+
+        // Form Submission
+        signupForm.addEventListener('submit', (e) => {
+            let valid = true;
+
+            if (!valid) { e.preventDefault();
+            }
+
+            if (fullNameInput.value.trim().length < 2) {
+                showError(fullNameInput, 'fullNameError', true);
+                valid = false;
+            }
+
+            if (!isValidUsername(usernameInput.value)) {
+                showError(usernameInput, 'usernameError', true);
+                valid = false;
+            }
+
+            if (!isValidEmail(emailInput.value)) {
+                showError(emailInput, 'emailError', true);
+                valid = false;
+            }
+
+            const password = passwordInput.value;
+            if (password.length < 8 || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+                showError(passwordInput, 'passwordError', true);
+                valid = false;
+            }
+
+            if (password !== confirmPasswordInput.value) {
+                showError(confirmPasswordInput, 'confirmPasswordError', true);
+                valid = false;
+            }
+
+            if (selectedInterests.length < 3) {
+                interestsError.style.display = 'block';
+                valid = false;
+            }
+
+            if (valid) {
+                signupBtn.classList.add('loading');
+                signupBtn.disabled = true;
+
+                setTimeout(() => {
+                    signupBtn.classList.remove('loading');
+                    signupBtn.disabled = false;
+                }, 2500);
+            }
+        });
+
+        document.getElementById("signupForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            const response = await fetch("", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                window.location.href = data.redirect;
+            } else {
+                let errorBox = document.getElementById("errorBox");
+
+                if (!errorBox) {
+                    errorBox = document.createElement("div");
+                    errorBox.id = "errorBox";
+                    errorBox.style.color = "red";
+                    errorBox.style.marginBottom = "10px";
+                    this.prepend(errorBox);
+                }
+
+                errorBox.innerText = data.error;
+            }
+        });
+
+    </script>
+</body>
+</html>

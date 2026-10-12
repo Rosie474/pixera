@@ -1,0 +1,718 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glow Chats — Pixera</title>
+    <link rel="stylesheet" href="{% static 'messages.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="top-navbar" id="topNavbar">
+        <div class="navbar-container">
+            <a href="{% url 'dashboard' %}" class="nav-logo" target="_self">
+                <img src="{% static 'pixeralogo1.png' %}"
+                    alt="Pixera"
+                    class="nav-logo-img">
+
+                <span class="nav-logo-text">Pixera</span>
+            </a>
+
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search messages, people...">
+                <button class="search-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+            <div class="nav-actions">
+                <button class="nav-action-btn" id="notifBtn" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge">2</span>
+                </button>
+                <a href="{% url "createpost2" %}" target="_self">
+                    <button class="nav-action-btn create-post-btn" id="createPostBtn">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Create</span>
+                   </button>
+                </a>
+                <div class="nav-profile">
+                    {% if user.profile.profile_picture %}
+                        <img src="{{ user.profile.profile_picture.url }}" alt="Profile" class="nav-avatar">
+                    {% else %}
+                        <img src="/static/default.jpg" alt="profile" class="nav-avatar">
+                    {% endif %}
+                    <div class="profile-dropdown">
+                        <a href="{% url "profile" %}"><i class="fa-regular fa-user"></i> Profile</a>
+                        <a href="{% url "settings" %}"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <a href="{% url "index" %}"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a>
+                    </div>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="dashboard-layout">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar" id="leftSidebar">
+            <div class="sidebar-inner">
+                <nav class="sidebar-nav">
+                    <a href="{% url "dashboard" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-house"></i></span>
+                        <span class="sidebar-label">Home</span>
+                    </a>
+                    <a href="{% url "discover" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-compass"></i></span>
+                        <span class="sidebar-label">Explore</span>
+                    </a>
+                    <a href="{% url "boards" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-palette"></i></span>
+                        <span class="sidebar-label">Boards</span>
+                    </a>
+                    <a href="{% url "messages" %}" class="sidebar-link active" target="_self">
+                        <span class="sidebar-icon"><i class="fa-regular fa-comment-dots"></i></span>
+                        <span class="sidebar-label">Messages</span>
+                        <span class="sidebar-badge" id="sidebarUnreadBadge">{{ unread_count }}</span>
+                    </a>
+                    <a href="{% url "profile" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-regular fa-user"></i></span>
+                        <span class="sidebar-label">Profile</span>
+                    </a>
+                    <a href="{% url "settings" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-gear"></i></span>
+                        <span class="sidebar-label">Settings</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="mood-tracker-mini">
+                        <span class="mood-label">Today's Mood</span>
+                        <div class="mood-options">
+                            <button class="mood-btn mood-happy active" title="Happy"><i class="fa-solid fa-face-smile"></i></button>
+                            <button class="mood-btn mood-calm" title="Calm"><i class="fa-solid fa-face-meh"></i></button>
+                            <button class="mood-btn mood-excited" title="Excited"><i class="fa-solid fa-face-laugh-beam"></i></button>
+                            <button class="mood-btn mood-sad" title="Reflective"><i class="fa-solid fa-face-frown"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center: Glow Chats -->
+        <main class="center-feed chat-layout" id="centerFeed">
+            <!-- Conversations Panel -->
+            <div class="conversations-panel" id="conversationsPanel">
+                <div class="conv-header">
+                    <div class="conv-header-top">
+                        <h2>Messages</h2>
+                    </div>
+                    <div class="conv-filter">
+                        <button class="filter-tab active" data-filter="all">All</button>
+                        <button class="filter-tab" data-filter="unread">Unread <span  id="topUnreadBadge" class="filter-badge">{{ unread_count }}</span></button>
+                        
+                    </div>
+                </div>
+
+
+                   <div class="conv-list" id="convList">
+
+                        {% for person in users %}
+                        <div class="conv-item"
+                            data-user-id="{{ person.id }}"
+                            data-conversation-id="{{ person.conversation_id }}">
+
+                            <div class="conv-avatar-wrap">
+                                 <a href="{% url 'creator_profile' person.username %}">
+                                {% if person.profile.profile_picture %}
+                                    <img src="{{ person.profile.profile_picture.url }}"
+                                        class="conv-avatar">
+                                {% else %}
+                                    <img src="/static/default.jpg"
+                                        class="conv-avatar">
+                                {% endif %}
+                                </a>
+                                <span class="conv-status online"></span>
+                            </div>
+
+                            <div class="conv-body">
+
+                                <div class="conv-meta">
+                                    <span class="conv-name">
+                                        {{ person.username }}
+                                    </span>
+
+                                    {% if person.unread_count %}
+                                        <span class="conv-unread">{{ person.unread_count }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="conv-preview">
+                                    <p class="conv-text">
+                                        Click to start chatting
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        {% endfor %}
+
+                    </div>
+            </div>
+
+            <!-- Chat Panel -->
+            <div class="chat-panel" id="chatPanel">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <button class="chat-back-btn" id="chatBackBtn"><i class="fa-solid fa-arrow-left"></i></button>
+                    <div class="chat-header-avatar">
+
+                        {% if other_user and other_user.profile.profile_picture %}
+                            <img src="{{ other_user.profile.profile_picture.url }}">
+                        {% else %}
+                            <img src="{% static 'default.jpg' %}">
+                        {% endif %}
+
+                    </div>
+
+                    <div class="chat-header-info">
+
+                        {% if other_user %}
+                            <span class="chat-header-name">
+                                {{ other_user.username }}
+                            </span>
+                        {% else %}
+                            <span class="chat-header-name">
+                                Select a chat
+                            </span>
+                        {% endif %}
+
+                        <span class="chat-header-status-text">
+                            Active now
+                        </span>
+
+                    </div>
+                </div>
+                <!-- Messages Area -->
+                <div class="messages-area" id="messagesArea">
+                   {% for msg in messages %}
+
+                        {% if msg.sender == request.user %}
+
+                        <div class="msg-row sent">
+                            <div class="msg-bubble">
+                                <p class="msg-text">{{ msg.text }}</p>
+                                <span class="msg-time">
+                                    {{ msg.created_at|date:"g:i A" }}
+                                </span>
+                            </div>
+                        </div>
+
+                        {% else %}
+
+                        <div class="msg-row received">
+
+                            {% if msg.sender.profile.profile_picture %}
+                            <img src="{{ msg.sender.profile.profile_picture.url }}"
+                                class="msg-avatar">
+                            {% endif %}
+
+                            <div class="msg-bubble">
+                                <p class="msg-text">{{ msg.text }}</p>
+                                <span class="msg-time">
+                                    {{ msg.created_at|date:"g:i A" }}
+                                </span>
+                            </div>
+                        </div>
+
+                        {% endif %}
+
+                    {% empty %}
+
+                    <div class="msg-date-divider">
+                        <span>No messages yet</span>
+                    </div>
+
+                    {% endfor %}
+                </div>
+
+                <!-- Input Area -->
+                <div class="chat-input-area">
+                    <div class="input-toolbar">
+                        <button class="input-tool"><i class="fa-regular fa-image"></i></button>
+                    </div>
+                    <div class="input-wrap">
+                        <input type="text" id="messageInput" placeholder="Type your message...">
+                        <button class="send-btn" id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-bottom-nav" id="mobileBottomNav">
+        <a href="{% url "dashboard" %}" class="mobile-nav-link" target="_self">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="{% url "discover" %}" class="mobile-nav-link" target="_self">
+            <i class="fa-solid fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <a href="{% url "createpost2" %}" class="mobile-create-btn" id="mobileCreateBtn">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+        <a href="{% url "messages" %}" class="mobile-nav-link active" target="_self">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span>Chat</span>
+        </a>
+        <a href="{% url "profile" %}" class="mobile-nav-link" target="_self">
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+
+        const notifSocket = new WebSocket(
+            "ws://" + window.location.host + "/ws/notifications/"
+        );
+        notifSocket.onmessage = function(e) {
+
+            const data = JSON.parse(e.data);
+
+            console.log("NOTIFICATION:", data);
+
+            const sidebarBadge =
+                document.getElementById("sidebarUnreadBadge");
+
+            const topBadge =
+                document.getElementById("topUnreadBadge");
+
+            if (sidebarBadge) {
+                sidebarBadge.innerText =
+                    Number(sidebarBadge.innerText || 0) + 1;
+            }
+
+            if (topBadge) {
+                topBadge.innerText =
+                    Number(topBadge.innerText || 0) + 1;
+            }
+
+            const conv = document.querySelector(
+                `.conv-item[data-conversation-id="${data.conversation_id}"]`
+            );
+
+            if (conv) {
+
+                const meta = conv.querySelector(".conv-meta");
+
+                let badge = conv.querySelector(".conv-unread");
+
+                if (!badge) {
+                    badge = document.createElement("span");
+                    badge.className = "conv-unread";
+                    badge.innerText = "1";
+                    meta.appendChild(badge);
+                } else {
+                    badge.innerText =
+                        Number(badge.innerText) + 1;
+                }
+            }
+        };
+
+
+
+        const CURRENT_USER_ID = "{{ request.user.id }}";
+        // ===== MOBILE MENU =====
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const leftSidebar = document.getElementById('leftSidebar');
+        const topNavbar = document.getElementById('topNavbar');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            leftSidebar.classList.toggle('mobile-open');
+            mobileMenuToggle.classList.toggle('active');
+            document.body.classList.toggle('sidebar-open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (leftSidebar.classList.contains('mobile-open') && 
+                !leftSidebar.contains(e.target) && 
+                !mobileMenuToggle.contains(e.target)) {
+                leftSidebar.classList.remove('mobile-open');
+                mobileMenuToggle.classList.remove('active');
+                document.body.classList.remove('sidebar-open');
+            }
+        });
+
+        // ===== PROFILE DROPDOWN =====
+        const navProfile = document.querySelector('.nav-profile');
+        navProfile.addEventListener('click', () => {
+            navProfile.classList.toggle('dropdown-open');
+        });
+        document.addEventListener('click', (e) => {
+            if (!navProfile.contains(e.target)) {
+                navProfile.classList.remove('dropdown-open');
+            }
+        });
+
+        // ===== NAVBAR SCROLL =====
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 100) {
+                topNavbar.classList.add('scrolled');
+            } else {
+                topNavbar.classList.remove('scrolled');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // ===== MOOD TRACKER =====
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ===== CONVERSATION SWITCHING =====
+
+        document.querySelectorAll('.conv-item').forEach(item => {
+            item.addEventListener('click', async () => {
+
+                const userId = item.dataset.userId;
+
+                const badge = item.querySelector(".conv-unread");
+
+                if (badge) {
+                    const count = Number(badge.innerText);
+
+                    const sidebarBadge =
+                        document.getElementById("sidebarUnreadBadge");
+
+                    const topBadge =
+                        document.getElementById("topUnreadBadge");
+
+                    if (sidebarBadge) {
+                        sidebarBadge.innerText =
+                            Math.max(
+                                0,
+                                Number(sidebarBadge.innerText) - count
+                            );
+                    }
+
+                    if (topBadge) {
+                        topBadge.innerText =
+                            Math.max(
+                                0,
+                                Number(topBadge.innerText) - count
+                            );
+                    }
+
+                    badge.remove();
+                }
+
+                const res = await fetch(`/api/chat/${userId}/`);
+                const data = await res.json();
+
+                // update UI
+                document.querySelector('.chat-header-name').innerText = data.user.username;
+
+                if (data.user.avatar) {
+                    document.querySelector('.chat-header-avatar img').src = data.user.avatar;
+                }
+
+                // clear messages
+                const messagesArea = document.getElementById('messagesArea');
+                messagesArea.innerHTML = '';
+
+                // render messages
+                data.messages.forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = msg.is_me ? 'msg-row sent' : 'msg-row received';
+
+                    div.innerHTML = `
+                        <div class="msg-bubble">
+                            <p class="msg-text">${msg.text}</p>
+                            <span class="msg-time">${msg.time}</span>
+                        </div>
+                    `;
+
+                    messagesArea.appendChild(div);
+                });
+
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+
+                // start websocket here
+                openChat(userId, data.conversation_id);
+
+                // ===== MOBILE: show chat panel =====
+                const chatPanel = document.getElementById('chatPanel');
+                if (window.innerWidth <= 768) {
+                    chatPanel.classList.add('mobile-active');
+                }
+            });
+        });
+
+        // Mobile back button
+        const chatBackBtn = document.getElementById('chatBackBtn');
+        chatBackBtn.addEventListener('click', () => {
+            const chatPanel = document.getElementById('chatPanel');
+            chatPanel.classList.remove('mobile-active');
+        });
+
+                    // ===== SEND MESSAGE =====
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const messagesArea = document.getElementById('messagesArea');
+        function sendMessage() {
+            const input = document.getElementById("messageInput");
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
+                console.log("Socket not open");
+                return;
+            }
+
+            socket.send(JSON.stringify({
+                message: text,
+                sender: CURRENT_USER_ID
+            }));
+
+            input.value = "";
+        }
+        messageInput.addEventListener("input", () => {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({
+                    type: "typing",
+                    sender: CURRENT_USER_ID
+                }));
+            }
+        });
+        let socket = null;
+        let roomId = null;
+
+       function openChat(userId, conversationId) {
+            roomId = conversationId;
+
+            // CLOSE OLD SOCKET CLEANLY
+            if (socket) {
+                socket.onclose = null;
+                socket.close();
+            }
+
+            socket = new WebSocket(
+                "ws://" + window.location.host + "/ws/chat/" + roomId + "/"
+            );
+
+            socket.onopen = () => {
+                console.log("WebSocket connected");
+            };
+
+            socket.onclose = () => {
+                console.log("WebSocket closed");
+            };
+
+            socket.onerror = (e) => {
+                console.log("WebSocket error", e);
+            };
+
+            socket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+
+                console.log("WS DATA:", data);
+
+                const sidebarBadge =
+                    document.getElementById("sidebarUnreadBadge");
+
+                const topBadge =
+                    document.getElementById("topUnreadBadge");
+
+                if (data.typing) {
+                    console.log("typing..");
+                    return;
+                }
+
+                const messagesArea = document.getElementById("messagesArea");
+
+                const div = document.createElement("div");
+
+                div.className =
+                    Number(data.sender) === Number(CURRENT_USER_ID)
+                    ? "msg-row sent"
+                    : "msg-row received";
+
+                if (Number(data.sender) !== Number(CURRENT_USER_ID)) {
+
+                    if (sidebarBadge) {
+                        sidebarBadge.innerText =
+                            Number(sidebarBadge.innerText || 0) + 1;
+                    }
+
+                    if (topBadge) {
+                        topBadge.innerText =
+                            Number(topBadge.innerText || 0) + 1;
+                    }
+
+                }
+
+                div.innerHTML = `
+                    <div class="msg-bubble">
+                        <p class="msg-text">${data.message}</p>
+                    </div>
+                `;
+
+                messagesArea.appendChild(div);
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+
+                const conv = document.querySelector(
+                    `.conv-item[data-conversation-id="${data.conversation_id}"]`
+                );
+
+                if (conv && Number(data.sender) !== Number(CURRENT_USER_ID)) {
+
+                    const meta = conv.querySelector(".conv-meta");
+
+                    let badge = conv.querySelector(".conv-unread");
+
+                    if (!badge) {
+                        badge = document.createElement("span");
+                        badge.className = "conv-unread";
+                        badge.innerText = "1";
+                        meta.appendChild(badge);
+                    } else {
+                        badge.innerText = Number(badge.innerText) + 1;
+                    }
+
+                    const unreadTop = document.getElementById("unreadBadge");
+
+                    if (unreadTop) {
+                        unreadTop.innerText =
+                            Number(unreadTop.innerText || 0) + 1;
+                    }
+                }
+            };
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Scroll to bottom on load
+        messagesArea.scrollTop = messagesArea.scrollHeight;
+
+        // ===== FILTER TABS =====
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+
+
+        const notificationSocket = new WebSocket(
+            "ws://" + window.location.host + "/ws/notifications/"
+        );
+
+
+
+        const searchInput = document.querySelector(".search-input");
+        const convList = document.getElementById("convList");
+
+        searchInput.addEventListener("input", async () => {
+            const query = searchInput.value.trim();
+
+            if (query.length === 0) return;
+
+            const res = await fetch(`/api/search-users/?q=${query}`);
+            const data = await res.json();
+
+            convList.innerHTML = "";
+
+            data.users.forEach(user => {
+                const div = document.createElement("div");
+                div.className = "conv-item";
+
+                div.dataset.userId = user.id;
+                div.dataset.conversationId = user.conversation_id || "";
+
+                div.innerHTML = `
+                    <div class="conv-avatar-wrap">
+                        <img src="${user.avatar || '/static/default.jpg'}" class="conv-avatar">
+                    </div>
+
+                    <div class="conv-body">
+                        <div class="conv-meta">
+                            <span class="conv-name">${user.username}</span>
+                            ${user.unread ? `<span class="conv-unread">${user.unread}</span>` : ""}
+                        </div>
+
+                        <div class="conv-preview">
+                            <p class="conv-text">${user.last_message || "No messages yet"}</p>
+                        </div>
+                    </div>
+                `;
+
+                div.addEventListener("click", () => {
+                    if (user.conversation_id) {
+                        openChat(user.id, user.conversation_id);
+                    }
+                    // Mobile: show chat panel
+                    const chatPanel = document.getElementById('chatPanel');
+                    if (window.innerWidth <= 768) {
+                        chatPanel.classList.add('mobile-active');
+                    }
+                });
+
+                convList.appendChild(div);
+            });
+        });
+
+        document.querySelectorAll(".filter-tab").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const filter = btn.dataset.filter;
+
+                // toggle active UI
+                document.querySelectorAll(".filter-tab").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+
+                document.querySelectorAll(".conv-item").forEach(item => {
+                    const unread = item.querySelector(".conv-unread");
+
+                    if (filter === "all") {
+                        item.style.display = "flex";
+                    }
+
+                    if (filter === "unread") {
+                        if (unread && parseInt(unread.innerText) > 0) {
+                            item.style.display = "flex";
+                        } else {
+                            item.style.display = "none";
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>

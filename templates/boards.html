@@ -1,0 +1,556 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vision Boards — Pixera</title>
+    <link rel="stylesheet" href="{% static 'boards.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<base target="_blank">
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="top-navbar" id="topNavbar">
+        <div class="navbar-container">
+            <a href="{% url 'dashboard' %}" class="nav-logo" target="_self">
+                <img src="{% static 'pixeralogo1.png' %}"
+                    alt="Pixera"
+                    class="nav-logo-img">
+
+                <span class="nav-logo-text">Pixera</span>
+            </a>
+
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search your boards, pins, and inspirations...">
+                <button class="search-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+            <div class="nav-actions">
+                <button class="nav-action-btn" id="notifBtn" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge">5</span>
+                </button>
+                <a href="{% url "createpost2" %}" target="_self">
+                    <button class="nav-action-btn create-post-btn" id="createPostBtn">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Create</span>
+                   </button>
+                </a>
+                <div class="nav-profile">
+                    {% if user.profile.profile_picture %}
+                        <img src="{{ user.profile.profile_picture.url }}" alt="Profile" class="nav-avatar">
+                    {% else %}
+                        <img src="/static/default.jpg" alt="profile" class="nav-avatar">
+                    {% endif %}
+                    <div class="profile-dropdown">
+                        <a href="{% url "profile" %}"><i class="fa-regular fa-user"></i> Profile</a>
+                        <a href="{% url "settings" %}"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <a href="{% url "index" %}"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a>
+                    </div>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="dashboard-layout">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar" id="leftSidebar">
+            <div class="sidebar-inner">
+                <nav class="sidebar-nav">
+                    <a href="{% url "dashboard" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-house"></i></span>
+                        <span class="sidebar-label">Home</span>
+                    </a>
+                    <a href="{% url "discover" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-compass"></i></span>
+                        <span class="sidebar-label">Explore</span>
+                    </a>
+                    <a href="{% url "boards" %}" class="sidebar-link active" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-palette"></i></span>
+                        <span class="sidebar-label">Boards</span>
+                    </a>
+                    <a href="{% url "messages" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-regular fa-comment-dots"></i></span>
+                        <span class="sidebar-label">Messages</span>
+                        <span class="sidebar-badge" id="sidebarUnreadBadge">{{ unread_count }}0</span>
+                    </a>
+                    <a href="{% url "profile" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-regular fa-user"></i></span>
+                        <span class="sidebar-label">Profile</span>
+                    </a>
+                    <a href="{% url "settings" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-gear"></i></span>
+                        <span class="sidebar-label">Settings</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="mood-tracker-mini">
+                        <span class="mood-label">Today's Mood</span>
+                        <div class="mood-options">
+                            <button class="mood-btn mood-happy active" title="Happy"><i class="fa-solid fa-face-smile"></i></button>
+                            <button class="mood-btn mood-calm" title="Calm"><i class="fa-solid fa-face-meh"></i></button>
+                            <button class="mood-btn mood-excited" title="Excited"><i class="fa-solid fa-face-laugh-beam"></i></button>
+                            <button class="mood-btn mood-sad" title="Reflective"><i class="fa-solid fa-face-frown"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center: Vision Boards -->
+        <main class="center-feed" id="centerFeed">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h1>Vision Boards</h1>
+                    <p>Curate your dreams, one pin at a time</p>
+                </div>
+                {% comment %} <button class="new-board-btn" id="newBoardBtn">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>New Board</span>
+                </button> {% endcomment %}
+            </div>
+
+            <!-- Boards Grid -->
+                <div class="boards-grid" id="boardsGrid">
+
+                    {% for board in boards %}
+                    <div class="board-card" data-board="{{ board.name }}">
+
+                        <div class="board-visual">
+                            <div class="board-collage">
+
+                                {% for post in board.posts %}
+                                    {% if forloop.first %}
+                                        <div class="collage-main">
+                                            {% if post.image %}
+                                                <img src="{{ post.image.url }}">
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <div class="collage-side">
+                                            {% if post.image %}
+                                                <img src="{{ post.image.url }}">
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                        <div class="board-info">
+                            <h3 class="board-title">{{ board.name }}</h3>
+                            <span class="board-count">{{ board.count }} pins</span>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+
+                
+
+                    <!-- Create Board stays static -->
+                    {% comment %} <div class="board-card board-create" id="createBoardCard">
+                        <div class="board-visual create-visual">
+                            <div class="create-icon-wrap">
+                                <div class="create-icon">
+                                    <i class="fa-solid fa-plus"></i>
+                                </div>
+                                <span class="create-label">Create New Board</span>
+                                <span class="create-hint">Organize your inspiration</span>
+                            </div>
+                            <div class="create-glow"></div>
+                        </div>
+                    </div> {% endcomment %}
+
+                </div>
+        </main>
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar" id="rightSidebar">
+            <div class="sidebar-inner">
+                <!-- Board Activity -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">
+                        <i class="fa-solid fa-bolt"></i>
+                        Recent Activity
+                    </h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-dot"></div>
+                            <div class="activity-text">
+                                <strong>You saved</strong> a pin to <span class="activity-board">Soft Life Spaces</span>
+                                <span class="activity-time">12 min ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-dot"></div>
+                            <div class="activity-text">
+                                <strong>You saved</strong> a pin to <span class="activity-board">Glow Goals</span>
+                                <span class="activity-time">2h ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-dot"></div>
+                            <div class="activity-text">
+                                <strong>New follower</strong> on <span class="activity-board">Dream Apartment</span>
+                                <span class="activity-time">5h ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-dot"></div>
+                            <div class="activity-text">
+                                <strong>You created</strong> <span class="activity-board">Summer Looks</span>
+                                <span class="activity-time">3d ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Saved -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">
+                        <i class="fa-solid fa-fire-flame-curved"></i>
+                        Your Top Boards
+                    </h3>
+                    <div class="top-boards-list">
+                        <div class="top-board-item">
+                            <div class="top-board-thumb">
+                                <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=100&h=100&fit=crop" alt="Soft Life">
+                            </div>
+                            <div class="top-board-info">
+                                <span class="top-board-name">Soft Life Spaces</span>
+                                <span class="top-board-count">89 pins</span>
+                            </div>
+                            <div class="top-board-bar">
+                                <div class="top-board-fill" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div class="top-board-item">
+                            <div class="top-board-thumb">
+                                <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=100&h=100&fit=crop" alt="Apartment">
+                            </div>
+                            <div class="top-board-info">
+                                <span class="top-board-name">Dream Apartment</span>
+                                <span class="top-board-count">63 pins</span>
+                            </div>
+                            <div class="top-board-bar">
+                                <div class="top-board-fill" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="top-board-item">
+                            <div class="top-board-thumb">
+                                <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=100&h=100&fit=crop" alt="Glow">
+                            </div>
+                            <div class="top-board-info">
+                                <span class="top-board-name">Glow Goals</span>
+                                <span class="top-board-count">47 pins</span>
+                            </div>
+                            <div class="top-board-bar">
+                                <div class="top-board-fill" style="width: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Board Tips -->
+                <div class="sidebar-card tips-card">
+                    <h3 class="sidebar-title">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        Board Tips
+                    </h3>
+                    <div class="tip-list">
+                        <div class="tip-item">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Use secret boards for gift ideas and surprises</span>
+                        </div>
+                        <div class="tip-item">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Organize with sections for easier browsing</span>
+                        </div>
+                        <div class="tip-item">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Collaborate by inviting friends to your boards</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-bottom-nav" id="mobileBottomNav">
+        <a href="#" class="mobile-nav-link">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="mobile-nav-link">
+            <i class="fa-solid fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <button class="mobile-create-btn" id="mobileCreateBtn">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+        <a href="#" class="mobile-nav-link">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span>Chat</span>
+        </a>
+        <a href="#" class="mobile-nav-link">
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Board Preview Modal -->
+    <div class="board-preview-overlay" id="boardPreviewOverlay">
+        <div class="board-preview-modal">
+            <div class="preview-header">
+                <div class="preview-header-left">
+                    <h2 id="previewTitle">Wig Inspo</h2>
+                    <span class="preview-subtitle"><span id="previewPinCount">24</span> pins · Updated 2d ago</span>
+                </div>
+                <div class="preview-header-actions">
+                    <button class="preview-action-btn"><i class="fa-solid fa-share-nodes"></i> Share</button>
+                    <button class="preview-action-btn primary"><i class="fa-solid fa-plus"></i> Add Pin</button>
+                    <button class="preview-close" id="previewClose"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="preview-masonry" id="previewMasonry">
+                <!-- Pins populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- New Board Modal -->
+    {% comment %} <div class="modal-overlay" id="newBoardModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Create New Board</h2>
+                <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Board Name</label>
+                    <input type="text" placeholder="e.g. Wedding Ideas, Travel Goals...">
+                </div>
+                <div class="form-group">
+                    <label>Description <span class="optional">(optional)</span></label>
+                    <textarea placeholder="What is this board about?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Privacy</label>
+                    <div class="privacy-options">
+                        <label class="privacy-option active">
+                            <input type="radio" name="privacy" value="public" checked>
+                            <div class="privacy-box">
+                                <i class="fa-solid fa-earth-americas"></i>
+                                <span>Public</span>
+                                <small>Anyone can see this board</small>
+                            </div>
+                        </label>
+                        <label class="privacy-option">
+                            <input type="radio" name="privacy" value="private">
+                            <div class="privacy-box">
+                                <i class="fa-solid fa-lock"></i>
+                                <span>Secret</span>
+                                <small>Only you can see this board</small>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelBoard">Cancel</button>
+                <button class="btn-primary" id="createBoard">Create Board</button>
+            </div>
+        </div>
+    </div> {% endcomment %}
+
+
+        <script id="board-data" type="application/json">
+    {
+        {% for board in boards %}
+        "{{ board.name }}": [
+            {% for post in board.posts %}
+            {
+                "img": "{% if post.image %}{{ post.image.url }}{% endif %}",
+                "title": "{{ post.caption|escapejs }}"
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    }
+    </script>
+
+    <script>
+        // ===== MOBILE MENU =====
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const leftSidebar = document.getElementById('leftSidebar');
+        const topNavbar = document.getElementById('topNavbar');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            leftSidebar.classList.toggle('mobile-open');
+            mobileMenuToggle.classList.toggle('active');
+            document.body.classList.toggle('sidebar-open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (leftSidebar.classList.contains('mobile-open') && 
+                !leftSidebar.contains(e.target) && 
+                !mobileMenuToggle.contains(e.target)) {
+                leftSidebar.classList.remove('mobile-open');
+                mobileMenuToggle.classList.remove('active');
+                document.body.classList.remove('sidebar-open');
+            }
+        });
+
+        // ===== PROFILE DROPDOWN =====
+        const navProfile = document.querySelector('.nav-profile');
+        navProfile.addEventListener('click', () => {
+            navProfile.classList.toggle('dropdown-open');
+        });
+        document.addEventListener('click', (e) => {
+            if (!navProfile.contains(e.target)) {
+                navProfile.classList.remove('dropdown-open');
+            }
+        });
+
+        // ===== NAVBAR SCROLL =====
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 100) {
+                topNavbar.classList.add('scrolled');
+            } else {
+                topNavbar.classList.remove('scrolled');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // ===== MOOD TRACKER =====
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ===== BOARD PREVIEW MODAL =====
+        const boardCards = document.querySelectorAll('.board-card:not(.board-create)');
+        const boardPreviewOverlay = document.getElementById('boardPreviewOverlay');
+        const previewClose = document.getElementById('previewClose');
+        const previewTitle = document.getElementById('previewTitle');
+        const previewPinCount = document.getElementById('previewPinCount');
+        const previewMasonry = document.getElementById('previewMasonry');
+
+        const boardPins = JSON.parse(document.getElementById("board-data").textContent);
+
+        boardCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const boardKey = card.dataset.board;
+                const pins = boardPins[boardKey] || [];
+                const title = card.querySelector('.board-title').textContent;
+                const count = card.querySelector('.board-count').textContent;
+
+                previewTitle.textContent = title;
+                previewPinCount.textContent = count.replace(/\D/g, '');
+                previewMasonry.innerHTML = pins.map(pin => `
+                    <div class="preview-pin">
+                        <div class="pin-image-wrap">
+                            <img src="${pin.img}" alt="${pin.title}" loading="lazy">
+                            <div class="pin-overlay">
+                                <button class="pin-save"><i class="fa-solid fa-check"></i> Saved</button>
+                                <button class="pin-more"><i class="fa-solid fa-ellipsis"></i></button>
+                            </div>
+                        </div>
+                        <div class="pin-meta">
+                            <span class="pin-title">${pin.title}</span>
+                            <div class="pin-actions-row">
+                                <button><i class="fa-solid fa-heart"></i></button>
+                                <button><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                boardPreviewOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        previewClose.addEventListener('click', () => {
+            boardPreviewOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        boardPreviewOverlay.addEventListener('click', (e) => {
+            if (e.target === boardPreviewOverlay) {
+                boardPreviewOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // ===== NEW BOARD MODAL =====
+        const newBoardBtn = document.getElementById('newBoardBtn');
+        const createBoardCard = document.getElementById('createBoardCard');
+        const newBoardModal = document.getElementById('newBoardModal');
+        const modalClose = document.getElementById('modalClose');
+        const cancelBoard = document.getElementById('cancelBoard');
+
+        [newBoardBtn, createBoardCard].forEach(el => {
+            el.addEventListener('click', () => {
+                newBoardModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        [modalClose, cancelBoard].forEach(el => {
+            el.addEventListener('click', () => {
+                newBoardModal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        newBoardModal.addEventListener('click', (e) => {
+            if (e.target === newBoardModal) {
+                newBoardModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Privacy toggle
+        document.querySelectorAll('.privacy-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.querySelectorAll('.privacy-option').forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+            });
+        });
+
+        const sidebarBadge = document.getElementById("sidebarUnreadBadge");
+
+        const notifSocket = new WebSocket(
+            "ws://" + window.location.host + "/ws/notifications/"
+        );
+
+        notifSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+
+            if (sidebarBadge) {
+                sidebarBadge.innerText = Number(sidebarBadge.innerText || 0) + 1;
+            }
+        };
+    </script>
+</body>
+</html>

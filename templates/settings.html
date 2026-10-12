@@ -1,0 +1,1442 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings — Pixera</title>
+    <link rel="stylesheet" href="{% static 'settings.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <base target="_blank">
+    <base target="_blank">
+</head>
+
+<body>
+    <!-- Top Navbar -->
+    <nav class="top-navbar" id="topNavbar">
+        <div class="navbar-container">
+            <a href="{% url 'dashboard' %}" class="nav-logo" target="_self">
+                <img src="{% static 'pixeralogo1.png' %}"
+                    alt="Pixera"
+                    class="nav-logo-img">
+
+                <span class="nav-logo-text">Pixera</span>
+            </a>
+
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-input"
+                    placeholder="Discover Fest — Search fashion, wellness, mood boards...">
+                <button class="search-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+            <div class="nav-actions">
+                <button class="nav-action-btn" id="notifBtn" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge">5</span>
+                </button>
+                <a href="{% url "createpost2" %}" target="_self">
+                    <button class="nav-action-btn create-post-btn" id="createPostBtn">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Create</span>
+                    </button>
+                </a>
+                <div class="nav-profile">
+                    {% if user.profile.profile_picture %}
+                    <img src="{{ user.profile.profile_picture.url }}" alt="Profile" class="nav-avatar">
+                    {% else %}
+                    <img src="/static/default.jpg" alt="profile" class="nav-avatar">
+                    {% endif %}
+                    <div class="profile-dropdown">
+                        <a href="{% url "profile" %}" target="_self"><i class="fa-regular fa-user"></i> Profile</a>
+                        <a href="{% url "settings" %}" target="_self"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <a href="{% url "index" %}" target="_self"><i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            Log Out</a>
+                    </div>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="dashboard-layout">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar" id="leftSidebar">
+            <div class="sidebar-inner">
+                <nav class="sidebar-nav">
+                    <a href="{% url "dashboard" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-house"></i></span>
+                        <span class="sidebar-label">Home</span>
+                    </a>
+                    <a href="{% url "discover" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-compass"></i></span>
+                        <span class="sidebar-label">Explore</span>
+                    </a>
+                    <a href="{% url "boards" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-palette"></i></span>
+                        <span class="sidebar-label">Boards</span>
+                    </a>
+                    <a href="{% url "messages" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-regular fa-comment-dots"></i></span>
+                        <span class="sidebar-label">Messages</span>
+                        <span class="sidebar-badge" id="sidebarUnreadBadge">{{ unread_count }}0</span>
+                    </a>
+                    <a href="{% url "profile" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-regular fa-user"></i></span>
+                        <span class="sidebar-label">Profile</span>
+                    </a>
+                    <a href="{% url "settings" %}" class="sidebar-link active" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-gear"></i></span>
+                        <span class="sidebar-label">Settings</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="mood-tracker-mini">
+                        <span class="mood-label">Today's Mood</span>
+                        <div class="mood-options">
+                            <button class="mood-btn mood-happy active" title="Happy"><i
+                                    class="fa-solid fa-face-smile"></i></button>
+                            <button class="mood-btn mood-calm" title="Calm"><i
+                                    class="fa-solid fa-face-meh"></i></button>
+                            <button class="mood-btn mood-excited" title="Excited"><i
+                                    class="fa-solid fa-face-laugh-beam"></i></button>
+                            <button class="mood-btn mood-sad" title="Reflective"><i
+                                    class="fa-solid fa-face-frown"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center Settings Content -->
+        <main class="center-feed settings-main" id="centerFeed">
+            <!-- Settings Header -->
+            <div class="settings-header">
+                <div class="settings-header-content">
+                    <h1 class="settings-title">Account Settings</h1>
+                    <p class="settings-subtitle">Manage your profile, security, and preferences</p>
+                </div>
+                <div class="settings-header-glow"></div>
+            </div>
+
+            <!-- Settings Navigation Tabs -->
+            <div class="settings-tabs">
+                <button class="settings-tab active" data-tab="account">
+                    <i class="fa-regular fa-user"></i>
+                    <span>Account</span>
+                </button>
+                <button class="settings-tab" data-tab="security">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Security</span>
+                </button>
+                <button class="settings-tab" data-tab="notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span>Notifications</span>
+                </button>
+                <button class="settings-tab" data-tab="appearance">
+                    <i class="fa-solid fa-palette"></i>
+                    <span>Appearance</span>
+                </button>
+                <button class="settings-tab" data-tab="privacy">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Privacy</span>
+                </button>
+                <button class="settings-tab" data-tab="connected">
+                    <i class="fa-solid fa-link"></i>
+                    <span>Connected</span>
+                </button>
+            </div>
+
+            <!-- 1. ACCOUNT SETTINGS SECTION -->
+            <section class="settings-section active" id="section-account">
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon">
+                            <i class="fa-regular fa-id-card"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title">Profile Information</h2>
+                            <p class="settings-card-desc">Update your personal details and public profile</p>
+                        </div>
+                    </div>
+                    <form method="POST" enctype="multipart/form-data" action="{% url 'settings' %}" target="_self">
+                        {% csrf_token %}
+
+                        <div class="settings-card-body">
+
+                            <!-- PROFILE UPLOAD AREA (UNCHANGED DESIGN) -->
+                            <div class="profile-upload-area">
+
+                                <!-- SINGLE FILE INPUT (FIXED) -->
+                                <input type="file"
+                                    name="profilePhoto"
+                                    class="profile-upload-input"
+                                    accept="image/*"
+                                    style="display:none">
+
+                                <div class="profile-upload-preview">
+                                    {% if user.profile.profile_picture %}
+                                        <img src="{{ user.profile.profile_picture.url }}" class="profile-upload-img">
+                                    {% else %}
+                                        <img src="/static/default.jpg" class="profile-avatar-img">
+                                    {% endif %}
+
+                                    <div class="profile-upload-overlay">
+                                        <i class="fa-solid fa-camera"></i>
+                                        <span>Change Photo</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-upload-actions">
+                                    <!-- FIX: trigger file input -->
+                                    <button type="button"
+                                            class="profile-upload-btn primary"
+                                            onclick="document.querySelector('.profile-upload-input').click()">
+                                        <i class="fa-solid fa-upload"></i>
+                                        Upload New
+                                    </button>
+
+                                    <button type="button" class="profile-upload-btn secondary">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- FORM FIELDS (ONLY ADD name ATTRIBUTES) -->
+                            <div class="settings-form">
+
+                                <div class="form-row">
+
+                                    <div class="form-group">
+                                        <label class="form-label">Full Name</label>
+                                        <div class="form-input-wrap">
+                                            <i class="fa-regular fa-user form-input-icon"></i>
+
+                                            <input type="text"
+                                                name="full_name"
+                                                class="form-input"
+                                                value="{{ user.get_full_name }}"
+                                                placeholder="Your full name">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Username</label>
+                                        <div class="form-input-wrap">
+                                            <i class="fa-solid fa-at form-input-icon"></i>
+
+                                            <input type="text"
+                                                name="username"
+                                                class="form-input"
+                                                value="{{ user.username }}"
+                                                placeholder="Your username">
+                                        </div>
+
+                                        <span class="form-hint">@{{user.username}} · Available</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-row">
+
+                                    <div class="form-group">
+                                        <label class="form-label">Email Address</label>
+                                        <div class="form-input-wrap">
+                                            <i class="fa-regular fa-envelope form-input-icon"></i>
+
+                                            <input type="email"
+                                                name="email"
+                                                class="form-input"
+                                                value="{{ user.email }}"
+                                                placeholder="Your email">
+
+                                            <span class="form-verified">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                                Verified
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label class="form-label">Bio</label>
+
+                                    <div class="form-textarea-wrap">
+                                        <textarea class="form-textarea"
+                                                name="bio"
+                                                rows="4"
+                                                placeholder="Tell the world about yourself...">
+                                            {{ user.profile.bio }}
+                                        </textarea>
+
+                                        <span class="form-char-count">142 / 250</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- FOOTER (UNCHANGED LOOK) -->
+                        <div class="settings-card-footer">
+                            <button type="submit" class="settings-save-btn">
+                                <i class="fa-solid fa-check"></i>
+                                Save Changes
+                            </button>
+
+                            <button type="button" class="settings-cancel-btn">
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </section>
+
+            <!-- 2. PASSWORD & SECURITY SECTION -->
+            <section class="settings-section" id="section-security">
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon security-icon">
+                            <i class="fa-solid fa-key"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title">Change Password</h2>
+                            <p class="settings-card-desc">Update your password to keep your account secure</p>
+                        </div>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label class="form-label">Current Password</label>
+                                <div class="form-input-wrap">
+                                    <i class="fa-solid fa-lock form-input-icon"></i>
+                                    <input type="password" class="form-input" value="••••••••••••"
+                                        placeholder="Enter current password">
+                                    <button class="form-toggle-password"><i class="fa-regular fa-eye"></i></button>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">New Password</label>
+                                    <div class="form-input-wrap">
+                                        <i class="fa-solid fa-lock form-input-icon"></i>
+                                        <input type="password" class="form-input" placeholder="Enter new password">
+                                        <button class="form-toggle-password"><i class="fa-regular fa-eye"></i></button>
+                                    </div>
+                                    <div class="password-strength">
+                                        <div class="strength-bar">
+                                            <div class="strength-fill" style="width: 75%"></div>
+                                        </div>
+                                        <span class="strength-text">Strong</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Confirm Password</label>
+                                    <div class="form-input-wrap">
+                                        <i class="fa-solid fa-lock form-input-icon"></i>
+                                        <input type="password" class="form-input" placeholder="Confirm new password">
+                                        <button class="form-toggle-password"><i class="fa-regular fa-eye"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-card-footer">
+                        <button class="settings-save-btn">
+                            <i class="fa-solid fa-rotate"></i>
+                            Update Password
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Two-Factor Authentication -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon tfa-icon">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title">Two-Factor Authentication</h2>
+                            <p class="settings-card-desc">Add an extra layer of security to your account</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="tfa-status">
+                            <div class="tfa-status-badge enabled">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Enabled</span>
+                            </div>
+                            <p class="tfa-status-text">Your account is protected with 2FA via authenticator app.</p>
+                        </div>
+                        <div class="tfa-methods">
+                            <div class="tfa-method active">
+                                <div class="tfa-method-icon">
+                                    <i class="fa-solid fa-mobile-screen"></i>
+                                </div>
+                                <div class="tfa-method-info">
+                                    <span class="tfa-method-name">Authenticator App</span>
+                                    <span class="tfa-method-desc">Google Authenticator</span>
+                                </div>
+                                <span class="tfa-method-status">Active</span>
+                            </div>
+                            <div class="tfa-method">
+                                <div class="tfa-method-icon">
+                                    <i class="fa-solid fa-comment-sms"></i>
+                                </div>
+                                <div class="tfa-method-info">
+                                    <span class="tfa-method-name">SMS Verification</span>
+                                    <span class="tfa-method-desc">+1 (555) 234-8901</span>
+                                </div>
+                                <button class="tfa-method-action">Enable</button>
+                            </div>
+                            <div class="tfa-method">
+                                <div class="tfa-method-icon">
+                                    <i class="fa-solid fa-key"></i>
+                                </div>
+                                <div class="tfa-method-info">
+                                    <span class="tfa-method-name">Backup Codes</span>
+                                    <span class="tfa-method-desc">10 codes remaining</span>
+                                </div>
+                                <button class="tfa-method-action">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Login Activity -->
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon activity-icon">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title">Login Activity</h2>
+                            <p class="settings-card-desc">Review your recent sign-in sessions</p>
+                        </div>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="login-activity-list">
+                            <div class="login-activity-item current">
+                                <div class="login-device-icon">
+                                    <i class="fa-solid fa-desktop"></i>
+                                </div>
+                                <div class="login-device-info">
+                                    <span class="login-device-name">MacBook Pro — Chrome</span>
+                                    <span class="login-device-location">New York, NY, USA</span>
+                                    <span class="login-device-time">Active now</span>
+                                </div>
+                                <span class="login-device-badge">Current</span>
+                            </div>
+                            <div class="login-activity-item">
+                                <div class="login-device-icon">
+                                    <i class="fa-solid fa-mobile-screen-button"></i>
+                                </div>
+                                <div class="login-device-info">
+                                    <span class="login-device-name">iPhone 15 Pro — Safari</span>
+                                    <span class="login-device-location">New York, NY, USA</span>
+                                    <span class="login-device-time">2 hours ago</span>
+                                </div>
+                                <button class="login-device-action">Log Out</button>
+                            </div>
+                            <div class="login-activity-item">
+                                <div class="login-device-icon">
+                                    <i class="fa-solid fa-tablet-screen-button"></i>
+                                </div>
+                                <div class="login-device-info">
+                                    <span class="login-device-name">iPad Air — GlowUp App</span>
+                                    <span class="login-device-location">Los Angeles, CA, USA</span>
+                                    <span class="login-device-time">3 days ago</span>
+                                </div>
+                                <button class="login-device-action">Log Out</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. NOTIFICATION PREFERENCES SECTION -->
+            <section class="settings-section" id="section-notifications">
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon notif-icon">
+                            <i class="fa-regular fa-bell"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title">Push Notifications</h2>
+                            <p class="settings-card-desc">Choose what you want to be notified about</p>
+                        </div>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="toggle-list">
+                            <div class="toggle-item">
+                                <div class="toggle-item-info">
+                                    <div class="toggle-item-icon likes-icon">
+                                        <i class="fa-solid fa-heart"></i>
+                                    </div>
+                                    <div class="toggle-item-text">
+                                        <span class="toggle-item-name">Likes</span>
+                                        <span class="toggle-item-desc">When someone likes your posts</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-item-info">
+                                    <div class="toggle-item-icon comments-icon">
+                                        <i class="fa-regular fa-comment"></i>
+                                    </div>
+                                    <div class="toggle-item-text">
+                                        <span class="toggle-item-name">Comments</span>
+                                        <span class="toggle-item-desc">When someone comments on your posts</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-item-info">
+                                    <div class="toggle-item-icon follows-icon">
+                                        <i class="fa-solid fa-user-plus"></i>
+                                    </div>
+                                    <div class="toggle-item-text">
+                                        <span class="toggle-item-name">Follows</span>
+                                        <span class="toggle-item-desc">When someone follows your account</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-item-info">
+                                    <div class="toggle-item-icon messages-icon">
+                                        <i class="fa-regular fa-paper-plane"></i>
+                                    </div>
+                                    <div class="toggle-item-text">
+                                        <span class="toggle-item-name">Direct Messages</span>
+                                        <span class="toggle-item-desc">When you receive a new message</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-item-info">
+                                    <div class="toggle-item-icon trending-icon">
+                                        <i class="fa-solid fa-fire-flame-curved"></i>
+                                    </div>
+                                    <div class="toggle-item-text">
+                                        <span class="toggle-item-name">Trending Updates</span>
+                                        <span class="toggle-item-desc">Popular posts and trending topics</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon email-icon">
+                            <i class="fa-regular fa-envelope"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title">Email Notifications</h2>
+                            <p class="settings-card-desc">Control what we send to your inbox</p>
+                        </div>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="toggle-list">
+                            <div class="toggle-item">
+                                <div class="toggle-item-info">
+                                    <div class="toggle-item-icon digest-icon">
+                                        <i class="fa-solid fa-newspaper"></i>
+                                    </div>
+                                    <div class="toggle-item-text">
+                                        <span class="toggle-item-name">Weekly Digest</span>
+                                        <span class="toggle-item-desc">Summary of your activity and highlights</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-item-info">
+                                    <div class="toggle-item-icon promo-icon">
+                                        <i class="fa-solid fa-tag"></i>
+                                    </div>
+                                    <div class="toggle-item-text">
+                                        <span class="toggle-item-name">Promotions & Offers</span>
+                                        <span class="toggle-item-desc">Exclusive deals and partner offers</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-item-info">
+                                    <div class="toggle-item-icon social-icon">
+                                        <i class="fa-solid fa-users"></i>
+                                    </div>
+                                    <div class="toggle-item-text">
+                                        <span class="toggle-item-name">Social Updates</span>
+                                        <span class="toggle-item-desc">Mentions, tags, and friend activity</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. APPEARANCE SETTINGS SECTION -->
+            <section class="settings-section" id="section-appearance">
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon theme-icon">
+                            <i class="fa-solid fa-moon"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title">Theme Mode</h2>
+                            <p class="settings-card-desc">Choose your preferred visual experience</p>
+                        </div>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="theme-mode-selector">
+                            <div class="theme-mode-card active" data-mode="light">
+                                <div class="theme-mode-preview light-preview">
+                                    <div class="preview-navbar"></div>
+                                    <div class="preview-content">
+                                        <div class="preview-card"></div>
+                                        <div class="preview-card small"></div>
+                                    </div>
+                                </div>
+                                <span class="theme-mode-label">Light</span>
+                                <span class="theme-mode-status">Active</span>
+                            </div>
+                            <div class="theme-mode-card" data-mode="dark">
+                                <div class="theme-mode-preview dark-preview">
+                                    <div class="preview-navbar"></div>
+                                    <div class="preview-content">
+                                        <div class="preview-card"></div>
+                                        <div class="preview-card small"></div>
+                                    </div>
+                                </div>
+                                <span class="theme-mode-label">Dark</span>
+                                <span class="theme-mode-status">Off</span>
+                            </div>
+                            <div class="theme-mode-card" data-mode="auto">
+                                <div class="theme-mode-preview auto-preview">
+                                    <div class="preview-navbar"></div>
+                                    <div class="preview-content">
+                                        <div class="preview-card"></div>
+                                        <div class="preview-card small"></div>
+                                    </div>
+                                </div>
+                                <span class="theme-mode-label">Auto</span>
+                                <span class="theme-mode-status">Off</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon accent-icon">
+                            <i class="fa-solid fa-palette"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title">Accent Color</h2>
+                            <p class="settings-card-desc">Personalize your interface accent</p>
+                        </div>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="accent-color-grid">
+                            <div class="accent-color-card active" data-color="pink">
+                                <div class="accent-color-swatch pink-swatch"></div>
+                                <span class="accent-color-name">Electric Pink</span>
+                                <i class="fa-solid fa-check accent-check"></i>
+                            </div>
+                            <div class="accent-color-card" data-color="purple">
+                                <div class="accent-color-swatch purple-swatch"></div>
+                                <span class="accent-color-name">Royal Purple</span>
+                            </div>
+                            <div class="accent-color-card" data-color="coral">
+                                <div class="accent-color-swatch coral-swatch"></div>
+                                <span class="accent-color-name">Bright Coral</span>
+                            </div>
+                            <div class="accent-color-card" data-color="teal">
+                                <div class="accent-color-swatch teal-swatch"></div>
+                                <span class="accent-color-name">Ocean Teal</span>
+                            </div>
+                            <div class="accent-color-card" data-color="gold">
+                                <div class="accent-color-swatch gold-swatch"></div>
+                                <span class="accent-color-name">Champagne Gold</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon font-icon">
+                            <i class="fa-solid fa-font"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title">Font Size</h2>
+                            <p class="settings-card-desc">Adjust text size for comfortable reading</p>
+                        </div>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="font-size-control">
+                            <span class="font-size-label small-label">A</span>
+                            <div class="font-size-slider">
+                                <input type="range" min="1" max="5" value="3" class="font-slider" id="fontSlider">
+                                <div class="font-size-marks">
+                                    <span></span><span></span><span></span><span></span><span></span>
+                                </div>
+                            </div>
+                            <span class="font-size-label large-label">A</span>
+                        </div>
+                        <div class="font-preview-card">
+                            <p class="font-preview-text">The quick brown fox jumps over the lazy dog. Style is a way to
+                                say who you are without having to speak.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. PRIVACY SETTINGS SECTION -->
+            <section class="settings-section" id="section-privacy">
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon privacy-icon">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title">Privacy Controls</h2>
+                            <p class="settings-card-desc">Manage who can see and interact with you</p>
+                        </div>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="toggle-list">
+                            <div class="toggle-item privacy-toggle">
+                                <div class="toggle-item-info">
+                                    <div class="toggle-item-icon private-icon">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </div>
+                                    <div class="toggle-item-text">
+                                        <span class="toggle-item-name">Private Account</span>
+                                        <span class="toggle-item-desc">Only approved followers can see your posts</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-item-info">
+                                    <div class="toggle-item-icon online-icon">
+                                        <i class="fa-solid fa-circle"></i>
+                                    </div>
+                                    <div class="toggle-item-text">
+                                        <span class="toggle-item-name">Show Online Status</span>
+                                        <span class="toggle-item-desc">Let others see when you're active</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-item-info">
+                                    <div class="toggle-item-icon dm-icon">
+                                        <i class="fa-regular fa-paper-plane"></i>
+                                    </div>
+                                    <div class="toggle-item-text">
+                                        <span class="toggle-item-name">Allow Direct Messages</span>
+                                        <span class="toggle-item-desc">Receive messages from anyone</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-item-info">
+                                    <div class="toggle-item-icon mention-icon">
+                                        <i class="fa-solid fa-at"></i>
+                                    </div>
+                                    <div class="toggle-item-text">
+                                        <span class="toggle-item-name">Allow Mentions</span>
+                                        <span class="toggle-item-desc">Others can tag you in posts and comments</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon block-icon">
+                            <i class="fa-solid fa-ban"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title">Blocked Users</h2>
+                            <p class="settings-card-desc">Manage accounts you've blocked</p>
+                        </div>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="blocked-users-list">
+                            <div class="blocked-user-item">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face"
+                                    alt="Blocked" class="blocked-user-avatar">
+                                <div class="blocked-user-info">
+                                    <span class="blocked-user-name">Jason Miller</span>
+                                    <span class="blocked-user-handle">@jasonmiller</span>
+                                </div>
+                                <span class="blocked-date">Blocked 2 weeks ago</span>
+                                <button class="blocked-unblock-btn">Unblock</button>
+                            </div>
+                            <div class="blocked-user-item">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face"
+                                    alt="Blocked" class="blocked-user-avatar">
+                                <div class="blocked-user-info">
+                                    <span class="blocked-user-name">Sarah Johnson</span>
+                                    <span class="blocked-user-handle">@sarahj</span>
+                                </div>
+                                <span class="blocked-date">Blocked 1 month ago</span>
+                                <button class="blocked-unblock-btn">Unblock</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. CONNECTED ACCOUNTS SECTION -->
+            <section class="settings-section" id="section-connected">
+                <div class="settings-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon connect-icon">
+                            <i class="fa-solid fa-link"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title">Connected Accounts</h2>
+                            <p class="settings-card-desc">Link your social accounts for easy sharing</p>
+                        </div>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="connected-accounts-list">
+                            <div class="connected-account-card connected">
+                                <div class="account-brand google-brand">
+                                    <i class="fa-brands fa-google"></i>
+                                </div>
+                                <div class="account-info">
+                                    <span class="account-name">Google</span>
+                                    <span class="account-detail">elena.mitchell@gmail.com</span>
+                                </div>
+                                <div class="account-status">
+                                    <span class="status-badge connected-badge">
+                                        <i class="fa-solid fa-link"></i> Connected
+                                    </span>
+                                </div>
+                                <button class="account-action-btn disconnect">Disconnect</button>
+                            </div>
+                            <div class="connected-account-card connected">
+                                <div class="account-brand instagram-brand">
+                                    <i class="fa-brands fa-instagram"></i>
+                                </div>
+                                <div class="account-info">
+                                    <span class="account-name">Instagram</span>
+                                    <span class="account-detail">@elenarose</span>
+                                </div>
+                                <div class="account-status">
+                                    <span class="status-badge connected-badge">
+                                        <i class="fa-solid fa-link"></i> Connected
+                                    </span>
+                                </div>
+                                <button class="account-action-btn disconnect">Disconnect</button>
+                            </div>
+                            <div class="connected-account-card">
+                                <div class="account-brand tiktok-brand">
+                                    <i class="fa-brands fa-tiktok"></i>
+                                </div>
+                                <div class="account-info">
+                                    <span class="account-name">TikTok</span>
+                                    <span class="account-detail">Not connected</span>
+                                </div>
+                                <div class="account-status">
+                                    <span class="status-badge disconnected-badge">
+                                        <i class="fa-solid fa-unlink"></i> Disconnected
+                                    </span>
+                                </div>
+                                <button class="account-action-btn connect">Connect</button>
+                            </div>
+                            <div class="connected-account-card">
+                                <div class="account-brand pinterest-brand">
+                                    <i class="fa-brands fa-pinterest-p"></i>
+                                </div>
+                                <div class="account-info">
+                                    <span class="account-name">Pinterest</span>
+                                    <span class="account-detail">Not connected</span>
+                                </div>
+                                <div class="account-status">
+                                    <span class="status-badge disconnected-badge">
+                                        <i class="fa-solid fa-unlink"></i> Disconnected
+                                    </span>
+                                </div>
+                                <button class="account-action-btn connect">Connect</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. DANGER ZONE SECTION -->
+            <section class="settings-section" id="section-danger">
+                <div class="settings-card danger-card">
+                    <div class="settings-card-header">
+                        <div class="settings-card-icon danger-icon">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="settings-card-title-wrap">
+                            <h2 class="settings-card-title danger-title">Danger Zone</h2>
+                            <p class="settings-card-desc danger-desc">Irreversible account actions. Proceed with
+                                caution.</p>
+                        </div>
+                    </div>
+                    <div class="settings-card-body">
+                        <div class="danger-zone-content">
+                            <div class="danger-action-card">
+                                <div class="danger-action-icon deactivate-icon">
+                                    <i class="fa-solid fa-power-off"></i>
+                                </div>
+                                <div class="danger-action-info">
+                                    <h3 class="danger-action-name">Deactivate Account</h3>
+                                    <p class="danger-action-desc">Temporarily hide your profile and content. You can
+                                        reactivate anytime by logging back in.</p>
+                                </div>
+                                <button class="danger-btn deactivate-btn">Deactivate</button>
+                            </div>
+                            <div class="danger-divider"></div>
+                            <div class="danger-action-card">
+                                <div class="danger-action-icon delete-icon">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </div>
+                                <div class="danger-action-info">
+                                    <h3 class="danger-action-name">Delete Account</h3>
+                                    <p class="danger-action-desc">Permanently delete your account, posts, and all data.
+                                        This action cannot be undone.</p>
+                                </div>
+                                <button class="danger-btn delete-btn">Delete Account</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar" id="rightSidebar">
+            <div class="sidebar-inner">
+                <!-- Settings Quick Actions -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">
+                        <i class="fa-solid fa-bolt"></i>
+                        Quick Actions
+                    </h3>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Download Data</span>
+                        </button>
+                        <button class="quick-action-btn">
+                            <i class="fa-solid fa-file-shield"></i>
+                            <span>Privacy Checkup</span>
+                        </button>
+                        <button class="quick-action-btn">
+                            <i class="fa-solid fa-rotate"></i>
+                            <span>Reset Preferences</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Account Health -->
+                <div class="sidebar-card health-card">
+                    <h3 class="sidebar-title">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                        Account Health
+                    </h3>
+                    <div class="health-score">
+                        <div class="health-ring">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(147,51,234,0.1)"
+                                    stroke-width="8" />
+                                <circle cx="50" cy="50" r="42" fill="none" stroke="url(#healthGradient)"
+                                    stroke-width="8" stroke-linecap="round" stroke-dasharray="220 264"
+                                    transform="rotate(-90 50 50)" />
+                                <defs>
+                                    <linearGradient id="healthGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#9333EA" />
+                                        <stop offset="100%" stop-color="#7B2D8E" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <span class="health-score-value">92</span>
+                        </div>
+                        <span class="health-score-label">Excellent</span>
+                    </div>
+                    <div class="health-items">
+                        <div class="health-item">
+                            <i class="fa-solid fa-check health-check"></i>
+                            <span>2FA Enabled</span>
+                        </div>
+                        <div class="health-item">
+                            <i class="fa-solid fa-check health-check"></i>
+                            <span>Email Verified</span>
+                        </div>
+                        <div class="health-item">
+                            <i class="fa-solid fa-check health-check"></i>
+                            <span>Strong Password</span>
+                        </div>
+                        <div class="health-item">
+                            <i class="fa-solid fa-circle-exclamation health-warn"></i>
+                            <span>Phone Not Verified</span>
+                        </div>
+                    </div>
+                </div>
+
+              
+            </div>
+        </aside>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-bottom-nav" id="mobileBottomNav">
+        <a href="dashboard.html" class="mobile-nav-link" target="_self">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="discover.html" class="mobile-nav-link" target="_self">
+            <i class="fa-solid fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <button class="mobile-create-btn" id="mobileCreateBtn">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+        <a href="#" class="mobile-nav-link" target="_self">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span>Chat</span>
+        </a>
+        <a href="profile.html" class="mobile-nav-link" target="_self">
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+        // Load and apply saved theme and accent immediately
+        (function () {
+            const savedTheme = localStorage.getItem('glowup-theme') || 'light';
+            const savedAccent = localStorage.getItem('glowup-accent') || 'pink';
+
+            if (savedTheme !== 'light') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+            if (savedAccent !== 'pink') {
+                document.documentElement.setAttribute('data-accent', savedAccent);
+            }
+        })();
+
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const leftSidebar = document.getElementById('leftSidebar');
+        const topNavbar = document.getElementById('topNavbar');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            leftSidebar.classList.toggle('mobile-open');
+            mobileMenuToggle.classList.toggle('active');
+            document.body.classList.toggle('sidebar-open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (leftSidebar.classList.contains('mobile-open') &&
+                !leftSidebar.contains(e.target) &&
+                !mobileMenuToggle.contains(e.target)) {
+                leftSidebar.classList.remove('mobile-open');
+                mobileMenuToggle.classList.remove('active');
+                document.body.classList.remove('sidebar-open');
+            }
+        });
+
+        // Profile dropdown
+        const navProfile = document.querySelector('.nav-profile');
+        navProfile.addEventListener('click', () => {
+            navProfile.classList.toggle('dropdown-open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!navProfile.contains(e.target)) {
+                navProfile.classList.remove('dropdown-open');
+            }
+        });
+
+        // Navbar scroll behavior
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 100) {
+                topNavbar.classList.add('scrolled');
+            } else {
+                topNavbar.classList.remove('scrolled');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // Settings Tabs
+        const settingsTabs = document.querySelectorAll('.settings-tab');
+        const settingsSections = document.querySelectorAll('.settings-section');
+
+        settingsTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                settingsTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                settingsSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === 'section-' + targetTab) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Restore theme and accent UI state on page load
+        window.addEventListener('load', function () {
+            const savedTheme = localStorage.getItem('glowup-theme') || 'light';
+            const savedAccent = localStorage.getItem('glowup-accent') || 'pink';
+
+            // Update theme UI
+            document.querySelectorAll('.theme-mode-card').forEach(c => {
+                c.classList.remove('active');
+                c.querySelector('.theme-mode-status').textContent = 'Off';
+            });
+            const activeTheme = document.querySelector(`.theme-mode-card[data-mode="${savedTheme}"]`);
+            if (activeTheme) {
+                activeTheme.classList.add('active');
+                activeTheme.querySelector('.theme-mode-status').textContent = 'Active';
+            }
+
+            // Update accent UI
+            document.querySelectorAll('.accent-color-card').forEach(c => {
+                c.classList.remove('active');
+                const check = c.querySelector('.accent-check');
+                if (check) check.remove();
+            });
+            const activeAccent = document.querySelector(`.accent-color-card[data-color="${savedAccent}"]`);
+            if (activeAccent) {
+                activeAccent.classList.add('active');
+                const checkIcon = document.createElement('i');
+                checkIcon.className = 'fa-solid fa-check accent-check';
+                activeAccent.appendChild(checkIcon);
+            }
+        });
+
+        // Mood tracker
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Toggle switches animation
+        document.querySelectorAll('.toggle-switch input').forEach(toggle => {
+            toggle.addEventListener('change', function () {
+                const slider = this.nextElementSibling;
+                if (this.checked) {
+                    slider.style.boxShadow = '0 0 20px rgba(147, 51, 234, 0.4)';
+                } else {
+                    slider.style.boxShadow = 'none';
+                }
+            });
+        });
+
+        // Theme mode selector - Now Fully Functional
+        document.querySelectorAll('.theme-mode-card').forEach(card => {
+            card.addEventListener('click', function () {
+                const selectedTheme = this.dataset.mode;
+
+                // Update UI
+                document.querySelectorAll('.theme-mode-card').forEach(c => {
+                    c.classList.remove('active');
+                    c.querySelector('.theme-mode-status').textContent = 'Off';
+                });
+                this.classList.add('active');
+                this.querySelector('.theme-mode-status').textContent = 'Active';
+
+                // Apply theme to document
+                if (selectedTheme === 'light') {
+                    document.documentElement.removeAttribute('data-theme');
+                } else if (selectedTheme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                } else if (selectedTheme === 'auto') {
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (prefersDark) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    } else {
+                        document.documentElement.removeAttribute('data-theme');
+                    }
+                }
+
+                // Save preference to localStorage
+                localStorage.setItem('glowup-theme', selectedTheme);
+            });
+        });
+
+        // Accent color selector - Now Fully Functional
+        document.querySelectorAll('.accent-color-card').forEach(card => {
+            card.addEventListener('click', function () {
+                const selectedColor = this.dataset.color;
+
+                // Update UI
+                document.querySelectorAll('.accent-color-card').forEach(c => {
+                    c.classList.remove('active');
+                    const check = c.querySelector('.accent-check');
+                    if (check) check.remove();
+                });
+                this.classList.add('active');
+                const checkIcon = document.createElement('i');
+                checkIcon.className = 'fa-solid fa-check accent-check';
+                this.appendChild(checkIcon);
+
+                // Apply accent color to document
+                if (selectedColor === 'pink') {
+                    document.documentElement.removeAttribute('data-accent');
+                } else {
+                    document.documentElement.setAttribute('data-accent', selectedColor);
+                }
+
+                // Save preference to localStorage
+                localStorage.setItem('glowup-accent', selectedColor);
+            });
+        });
+
+        // Font size slider
+        const fontSlider = document.getElementById('fontSlider');
+        const fontPreviewText = document.querySelector('.font-preview-text');
+        if (fontSlider && fontPreviewText) {
+            fontSlider.addEventListener('input', function () {
+                const sizes = ['0.75rem', '0.85rem', '1rem', '1.1rem', '1.2rem'];
+                fontPreviewText.style.fontSize = sizes[this.value - 1];
+            });
+        }
+
+        // Password toggle visibility
+        document.querySelectorAll('.form-toggle-password').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const input = this.previousElementSibling;
+                const icon = this.querySelector('i');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        });
+
+        // Bio character count
+        const bioTextarea = document.querySelector('.form-textarea');
+        const charCount = document.querySelector('.form-char-count');
+        if (bioTextarea && charCount) {
+            bioTextarea.addEventListener('input', function () {
+                const count = this.value.length;
+                charCount.textContent = count + ' / 250';
+                if (count > 250) {
+                    charCount.style.color = 'var(--bright-coral)';
+                } else {
+                    charCount.style.color = 'var(--soft-gray)';
+                }
+            });
+        }
+
+        // Affirmation save
+        const affirmationSave = document.getElementById('affirmationSave');
+        if (affirmationSave) {
+            affirmationSave.addEventListener('click', function () {
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-regular');
+                icon.classList.toggle('fa-solid');
+                this.style.color = icon.classList.contains('fa-solid') ? 'var(--electric-pink)' : '';
+            });
+        }
+
+        // Unblock button
+        document.querySelectorAll('.blocked-unblock-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const item = this.closest('.blocked-user-item');
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(20px)';
+                setTimeout(() => item.remove(), 300);
+            });
+        });
+
+        // Connect/Disconnect account buttons
+        document.querySelectorAll('.account-action-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const card = this.closest('.connected-account-card');
+                const statusBadge = card.querySelector('.status-badge');
+                const accountDetail = card.querySelector('.account-detail');
+
+                if (this.classList.contains('connect')) {
+                    card.classList.add('connected');
+                    this.textContent = 'Disconnect';
+                    this.classList.remove('connect');
+                    this.classList.add('disconnect');
+                    statusBadge.className = 'status-badge connected-badge';
+                    statusBadge.innerHTML = '<i class="fa-solid fa-link"></i> Connected';
+                    accountDetail.textContent = 'Connected just now';
+                } else {
+                    card.classList.remove('connected');
+                    this.textContent = 'Connect';
+                    this.classList.remove('disconnect');
+                    this.classList.add('connect');
+                    statusBadge.className = 'status-badge disconnected-badge';
+                    statusBadge.innerHTML = '<i class="fa-solid fa-unlink"></i> Disconnected';
+                    accountDetail.textContent = 'Not connected';
+                }
+            });
+        });
+
+
+        // Danger zone buttons
+        document.querySelectorAll('.danger-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const action = this.classList.contains('delete-btn') ? 'delete' : 'deactivate';
+                const confirmed = confirm('Are you sure you want to ' + action + ' your account? This action ' + (action === 'delete' ? 'cannot be undone.' : 'can be reversed by logging back in.'));
+                if (confirmed) {
+                    this.textContent = 'Processing...';
+                    this.disabled = true;
+                }
+            });
+        });
+
+        // Profile upload handling
+        const profileUploadInput = document.querySelector('.profile-upload-input');
+        const profileUploadPreview = document.querySelector('.profile-upload-preview');
+        const profileUploadImg = document.querySelector('.profile-upload-img');
+        const profileUploadButton = document.querySelector('.profile-upload-btn.primary');
+        const profileRemoveButton = document.querySelector('.profile-upload-btn.secondary');
+        const defaultProfileSrc = profileUploadImg ? profileUploadImg.src : '';
+
+        const openProfilePicker = () => {
+            if (profileUploadInput) {
+                profileUploadInput.click();
+            }
+        };
+
+        if (profileUploadPreview) {
+            profileUploadPreview.addEventListener('click', openProfilePicker);
+        }
+
+        if (profileUploadButton) {
+            profileUploadButton.addEventListener('click', function (event) {
+                event.preventDefault();
+                openProfilePicker();
+            });
+        }
+
+        if (profileUploadInput) {
+            profileUploadInput.addEventListener('change', function () {
+                const file = this.files && this.files[0];
+                if (!file || !profileUploadImg) return;
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    profileUploadImg.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        if (profileRemoveButton) {
+            profileRemoveButton.addEventListener('click', function (event) {
+                event.preventDefault();
+                if (profileUploadImg) {
+                    profileUploadImg.src = defaultProfileSrc;
+                }
+                if (profileUploadInput) {
+                    profileUploadInput.value = '';
+                }
+            });
+        }
+
+        const sidebarBadge = document.getElementById("sidebarUnreadBadge");
+
+        const notifSocket = new WebSocket(
+            "ws://" + window.location.host + "/ws/notifications/"
+        );
+
+        notifSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+
+            if (sidebarBadge) {
+                sidebarBadge.innerText = Number(sidebarBadge.innerText || 0) + 1;
+            }
+        };
+    </script>
+</body>
+
+</html>

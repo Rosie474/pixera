@@ -1,0 +1,728 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Discover Fest — Pixera</title>
+    <link rel="stylesheet" href="{% static 'discover.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'dashboard.css' %}"> {% endcomment %}
+    {% comment %} <script src="{% static 'dashboard.js' %}" defer></script> {% endcomment %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <base target="_blank">
+</head>
+
+<body>
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+        <div class="ambient-shape ambient-shape-1"></div>
+        <div class="ambient-shape ambient-shape-2"></div>
+        <div class="ambient-shape ambient-shape-3"></div>
+        <div class="ambient-shape ambient-shape-4"></div>
+    </div>
+
+    <!-- Top Navbar -->
+    <nav class="top-navbar" id="topNavbar">
+        <div class="navbar-container">
+            <a href="{% url 'index' %}" class="nav-logo" target="_self">
+                <img src="{% static 'pixeralogo1.png' %}"
+                    alt="Pixera"
+                    class="nav-logo-img">
+                <span class="nav-logo-text">Pixera</span>
+            </a>
+
+            <div class="nav-actions">
+                <button class="nav-action-btn" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge">3</span>
+                </button>
+                <a href="{% url "createpost2" %}" target="_self">
+                    <button class="nav-action-btn create-post-btn" id="createPostBtn">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Create</span>
+                    </button>
+                </a>
+                <div class="nav-profile">
+                    {% if user.profile.profile_picture %}
+                        <img src="{{ user.profile.profile_picture.url }}" alt="Profile" class="nav-avatar">
+                    {% else %}
+                        <img src="/static/default.jpg" alt="profile" class="nav-avatar">
+                    {% endif %}
+                    <div class="profile-dropdown">
+                        <a href="{% url "profile" %}"><i class="fa-regular fa-user"></i> Profile</a>
+                        <a href="{% url "settings" %}"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <a href="{% url "index" %}"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a>
+                    </div>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+        <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Layout -->
+    <div class="discover-layout">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar" id="leftSidebar">
+            <div class="sidebar-inner">
+                <nav class="sidebar-nav">
+                    <a href="{% url "dashboard" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-house"></i></span>
+                        <span class="sidebar-label">Home</span>
+                    </a>
+                    <a href="{% url "discover" %}" class="sidebar-link active" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-compass"></i></span>
+                        <span class="sidebar-label">Explore</span>
+                    </a>
+                    <a href="{% url "boards" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-palette"></i></span>
+                        <span class="sidebar-label">Boards</span>
+                    </a>
+                    <a href="{% url "messages" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-regular fa-comment-dots"></i></span>
+                        <span class="sidebar-label">Messages</span>
+                        <span class="sidebar-badge" id="sidebarUnreadBadge">{{ unread_count }}0</span>
+                    </a>
+                    <a href="{% url "profile" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-regular fa-user"></i></span>
+                        <span class="sidebar-label">Profile</span>
+                    </a>
+                    <a href="{% url "settings" %}" class="sidebar-link" target="_self">
+                        <span class="sidebar-icon"><i class="fa-solid fa-gear"></i></span>
+                        <span class="sidebar-label">Settings</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Center Content -->
+        <main class="discover-main">
+            <!-- Hero Search Section -->
+            <div class="discover-hero">
+                <div class="discover-hero-inner">
+                    <h1 class="discover-title">Discover Fest</h1>
+                    <p class="discover-subtitle">Find what makes you glow. Search millions of posts, creators, and
+                        inspiration.</p>
+
+                    <div class="mega-search">
+                        <div class="mega-search-wrap">
+                            <i class="fa-solid fa-magnifying-glass mega-search-icon"></i>
+                            <input type="text" class="mega-search-input" id="megaSearch"
+                                placeholder="Search fashion, wellness, mood boards, creators..."
+                                value="morning skincare routine">
+                            <button class="mega-search-clear" id="searchClear"><i
+                                    class="fa-solid fa-xmark"></i></button>
+                            <button class="mega-search-btn"><i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="trending-chips">
+                        <span class="chips-label"><i class="fa-solid fa-fire-flame-curved"></i> Trending:</span>
+                        <button class="trend-chip">#GlowUp2026</button>
+                        <button class="trend-chip">Glass Skin</button>
+                        <button class="trend-chip">Capsule Wardrobe</button>
+                        <button class="trend-chip">5AM Club</button>
+                        <button class="trend-chip">Manifestation</button>
+                        <button class="trend-chip">Clean Girl Aesthetic</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="category-filters">
+                <button class="cat-filter active" data-type="all">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>All</span>
+                </button>
+                <button class="cat-filter" data-type="fashion">
+                    <i class="fa-solid fa-shirt"></i>
+                    <span>Fashion</span>
+                </button>
+                <button class="cat-filter" data-type="beauty-tip">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Beauty</span>
+                </button>
+                <button class="cat-filter" data-type="skin">
+                    <i class="fa-solid fa-droplet"></i>
+                    <span>Skin</span>
+                </button>
+                <button class="cat-filter" data-type="nails">
+                    <i class="fa-solid fa-hand-sparkles"></i>
+                    <span>Nails</span>
+                </button>
+                <button class="cat-filter" data-type="mood-journal">
+                    <i class="fa-solid fa-spa"></i>
+                    <span>Wellness</span>
+                </button>
+            </div>
+
+            <!-- Result Tabs -->
+            <div class="result-tabs">
+                <button class="result-tab active" data-tab="posts">
+                    <i class="fa-solid fa-images"></i>
+                    <span>Posts</span>
+                    <span class="tab-count">1,247</span>
+                </button>
+                <button class="result-tab" data-tab="creators">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Creators</span>
+                    <span class="tab-count">86</span>
+                </button>
+                <button class="result-tab" data-tab="tags">
+                    <i class="fa-solid fa-hashtag"></i>
+                    <span>Tags</span>
+                    <span class="tab-count">42</span>
+                </button>
+            </div>
+
+            <!-- Results Content -->
+            <div class="results-content" id="resultsContent">
+                <!-- Posts Tab -->
+                <div class="tab-panel active" id="panel-posts">
+                    <div class="results-grid posts-grid" id="discoverPosts">
+                        {% if posts %}
+                            {% include "partials/posts.html" %}
+                        {% else %}
+                            <p>No posts found</p>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+
+              <div class="tab-panel" id="panel-creators">
+                    <div class="results-grid creators-grid">
+
+                        {% for creator in creators %}
+                    
+                        <div class="result-card creator-result">
+
+                            <div class="creator-cover">
+
+                                {% if creator.profile.cover_photo %}
+                                    <img src="{{ creator.profile.cover_photo.url }}" alt="Cover">
+                                {% else %}
+                                    <img src="{% static 'pawel-czerwinski-fcZU7mRWImY-unsplash.jpg' %}" alt="Cover">
+                                {% endif %}
+
+                            </div>
+
+                            <div class="creator-result-body">
+
+                                <div class="creator-result-avatar-wrap">
+
+                                    {% if creator.profile.profile_picture %}
+                                        <img src="{{ creator.profile.profile_picture.url }}" alt="{{ creator.username }}">
+                                    {% else %}
+                                        <img src="/static/default.jpg" alt="{{ creator.username }}">
+                                    {% endif %}
+
+                                    <div class="creator-result-badge verified">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+
+                                </div>
+                                <a href="{% url 'creator_profile' creator.username %}">
+                                    <h3 class="creator-result-name">
+                                        {{ creator.get_full_name|default:creator.username }}
+                                    </h3>
+
+                                    <p class="creator-result-handle">
+                                        @{{ creator.username }}
+                                    </p>
+                                </a>
+                                <p class="creator-result-bio">
+                                    {{ creator.profile.bio|default:"No bio yet." }}
+                                </p>
+
+                                <div class="creator-result-stats">
+
+                                    <span>
+                                        <strong>{{ followers_count }}</strong>
+                                        followers
+                                    </span>
+
+                                    <span>
+                                        <strong>{{ posts.count }}</strong>
+                                        posts
+                                    </span>
+
+                                </div>
+
+                                <button class="creator-result-follow">
+                                    Follow
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+                <!-- Tags Tab -->
+                <div class="tab-panel" id="panel-tags">
+                    <div class="results-grid tags-grid">
+                        <div class="result-card tag-card">
+                            <div class="tag-visual">
+                                <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&h=300&fit=crop"
+                                    alt="">
+                                <div class="tag-overlay">
+                                    <span class="tag-hash">#</span>
+                                </div>
+                            </div>
+                            <div class="tag-info">
+                                <h3 class="tag-name">#GlassSkin</h3>
+                                <p class="tag-desc">The dewy, luminous complexion trend taking over skincare routines
+                                    worldwide.</p>
+                                <div class="tag-metrics">
+                                    <span><i class="fa-solid fa-file-image"></i> 24.5K posts</span>
+                                    <span><i class="fa-solid fa-fire"></i> Trending</span>
+                                </div>
+                                <button class="tag-follow">Follow Tag</button>
+                            </div>
+                        </div>
+
+                        <div class="result-card tag-card">
+                            <div class="tag-visual">
+                                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=300&fit=crop"
+                                    alt="">
+                                <div class="tag-overlay">
+                                    <span class="tag-hash">#</span>
+                                </div>
+                            </div>
+                            <div class="tag-info">
+                                <h3 class="tag-name">#CapsuleWardrobe</h3>
+                                <p class="tag-desc">Minimalist fashion philosophy: fewer pieces, infinite combinations,
+                                    maximum style.</p>
+                                <div class="tag-metrics">
+                                    <span><i class="fa-solid fa-file-image"></i> 18.2K posts</span>
+                                    <span><i class="fa-solid fa-arrow-trend-up"></i> Rising</span>
+                                </div>
+                                <button class="tag-follow">Follow Tag</button>
+                            </div>
+                        </div>
+
+                        <div class="result-card tag-card">
+                            <div class="tag-visual">
+                                <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=300&fit=crop"
+                                    alt="">
+                                <div class="tag-overlay">
+                                    <span class="tag-hash">#</span>
+                                </div>
+                            </div>
+                            <div class="tag-info">
+                                <h3 class="tag-name">#5AMClub</h3>
+                                <p class="tag-desc">Early risers building discipline, clarity, and momentum before the
+                                    world wakes up.</p>
+                                <div class="tag-metrics">
+                                    <span><i class="fa-solid fa-file-image"></i> 15.8K posts</span>
+                                    <span><i class="fa-solid fa-fire"></i> Trending</span>
+                                </div>
+                                <button class="tag-follow">Follow Tag</button>
+                            </div>
+                        </div>
+
+                        <div class="result-card tag-card">
+                            <div class="tag-visual">
+                                <img src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop"
+                                    alt="">
+                                <div class="tag-overlay">
+                                    <span class="tag-hash">#</span>
+                                </div>
+                            </div>
+                            <div class="tag-info">
+                                <h3 class="tag-name">#VitaminCGlow</h3>
+                                <p class="tag-desc">Brightening routines, product reviews, and before-and-after
+                                    transformations.</p>
+                                <div class="tag-metrics">
+                                    <span><i class="fa-solid fa-file-image"></i> 12.1K posts</span>
+                                    <span><i class="fa-solid fa-arrow-trend-up"></i> Rising</span>
+                                </div>
+                                <button class="tag-follow">Follow Tag</button>
+                            </div>
+                        </div>
+
+                        <div class="result-card tag-card">
+                            <div class="tag-visual">
+                                <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=300&fit=crop"
+                                    alt="">
+                                <div class="tag-overlay">
+                                    <span class="tag-hash">#</span>
+                                </div>
+                            </div>
+                            <div class="tag-info">
+                                <h3 class="tag-name">#HomeWorkout</h3>
+                                <p class="tag-desc">No gym membership required. Living room circuits, bodyweight
+                                    training, and results.</p>
+                                <div class="tag-metrics">
+                                    <span><i class="fa-solid fa-file-image"></i> 9.7K posts</span>
+                                    <span><i class="fa-solid fa-fire"></i> Trending</span>
+                                </div>
+                                <button class="tag-follow">Follow Tag</button>
+                            </div>
+                        </div>
+
+                        <div class="result-card tag-card">
+                            <div class="tag-visual">
+                                <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=300&fit=crop"
+                                    alt="">
+                                <div class="tag-overlay">
+                                    <span class="tag-hash">#</span>
+                                </div>
+                            </div>
+                            <div class="tag-info">
+                                <h3 class="tag-name">#HeatlessCurls</h3>
+                                <p class="tag-desc">Overnight waves without the damage. Silk ties, robe methods, and
+                                    sock tutorials.</p>
+                                <div class="tag-metrics">
+                                    <span><i class="fa-solid fa-file-image"></i> 8.3K posts</span>
+                                    <span><i class="fa-solid fa-arrow-trend-up"></i> Rising</span>
+                                </div>
+                                <button class="tag-follow">Follow Tag</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-bottom-nav">
+        <a href="{% url 'dashboard' %}" class="mobile-nav-link" target="_self">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="{% url 'discover' %}" class="mobile-nav-link active" target="_self">
+            <i class="fa-solid fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <a href="{% url 'createpost2' %}" class="mobile-create-btn" target="_self">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+        <a href="{% url 'messages' %}" class="mobile-nav-link" target="_self">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span>Chat</span>
+        </a>
+        <a href="{% url 'profile' %}" class="mobile-nav-link" target="_self">
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const leftSidebar = document.getElementById('leftSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function openSidebar() {
+            leftSidebar.classList.add('mobile-open');
+            mobileMenuToggle.classList.add('active');
+            document.body.classList.add('sidebar-open');
+            if (sidebarOverlay) sidebarOverlay.classList.add('active');
+        }
+
+        function closeSidebar() {
+            leftSidebar.classList.remove('mobile-open');
+            mobileMenuToggle.classList.remove('active');
+            document.body.classList.remove('sidebar-open');
+            if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+        }
+
+        mobileMenuToggle.addEventListener('click', () => {
+            if (leftSidebar.classList.contains('mobile-open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeSidebar);
+        }
+
+        document.addEventListener('click', (e) => {
+            if (leftSidebar.classList.contains('mobile-open') &&
+                !leftSidebar.contains(e.target) &&
+                !mobileMenuToggle.contains(e.target)) {
+                closeSidebar();
+            }
+        });
+
+        // Profile dropdown
+        const navProfile = document.querySelector('.nav-profile');
+        navProfile.addEventListener('click', () => {
+            navProfile.classList.toggle('dropdown-open');
+        });
+        document.addEventListener('click', (e) => {
+            if (!navProfile.contains(e.target)) {
+                navProfile.classList.remove('dropdown-open');
+            }
+        });
+
+        // Search clear
+        const megaSearch = document.getElementById('megaSearch');
+        const searchClear = document.getElementById('searchClear');
+
+        searchClear.addEventListener('click', () => {
+            megaSearch.value = '';
+            megaSearch.focus();
+        });
+
+        megaSearch.addEventListener('input', () => {
+            searchClear.style.opacity = megaSearch.value ? '1' : '0';
+            searchClear.style.pointerEvents = megaSearch.value ? 'auto' : 'none';
+        });
+        searchClear.style.opacity = megaSearch.value ? '1' : '0';
+        searchClear.style.pointerEvents = megaSearch.value ? 'auto' : 'none';
+
+        // Category filters
+        {% comment %} document.querySelectorAll('.cat-filter').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.cat-filter').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        }); {% endcomment %}
+
+        document.querySelectorAll(".cat-filter").forEach(btn => {
+            btn.addEventListener("click", function () {
+
+                // active UI state
+                document.querySelectorAll(".cat-filter")
+                    .forEach(b => b.classList.remove("active"));
+
+                this.classList.add("active");
+
+                const type = this.dataset.type;
+
+                fetch(`/discover/?type=${type}`)
+                    .then(res => res.text())
+                    .then(html => {
+
+                        const doc = new DOMParser().parseFromString(html, "text/html");
+
+                        // IMPORTANT FIX HERE 👇
+                        const newPosts = doc.querySelector(".posts-grid");
+
+                        document.querySelector(".posts-grid").innerHTML =
+                            newPosts.innerHTML;
+                    });
+            });
+        });
+
+
+        {% comment %} document.querySelectorAll(".cat-filter").forEach(btn => {
+            btn.addEventListener("click", function () {
+
+                // active UI state
+                document.querySelectorAll(".cat-filter")
+                    .forEach(b => b.classList.remove("active"));
+
+                this.classList.add("active");
+
+                const type = this.dataset.type;
+
+                fetch(`/discover/?type=${type}`)
+                    .then(res => res.text())
+                    .then(html => {
+
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, "text/html");
+
+                        const newPosts = doc.querySelector(".posts-container");
+
+                        document.querySelector(".posts-container").innerHTML =
+                            newPosts.innerHTML;
+                    });
+            });
+        }); {% endcomment %}
+
+
+
+        //tag click
+
+        document.addEventListener("click", function (e) {
+            if (e.target.classList.contains("tag-filter")) {
+                const tag = e.target.dataset.tag;
+
+                fetch(`/explore/?tag=${tag}`)
+                    .then(res => res.text())
+                    .then(html => {
+                        const doc = new DOMParser().parseFromString(html, "text/html");
+
+                        document.querySelector(".posts-container").innerHTML =
+                            doc.querySelector(".posts-container").innerHTML;
+                    });
+            }
+        });
+
+
+
+
+        // Result tabs
+        const resultTabs = document.querySelectorAll('.result-tab');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+
+        resultTabs.forEach(tab => {
+            tab.addEventListener('click', function () {
+                const targetTab = this.dataset.tab;
+
+                resultTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                tabPanels.forEach(panel => {
+                    panel.classList.remove('active');
+                    if (panel.id === 'panel-' + targetTab) {
+                        panel.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Trending chips
+        document.querySelectorAll('.trend-chip').forEach(chip => {
+            chip.addEventListener('click', function () {
+                megaSearch.value = this.textContent.replace('#', '');
+                megaSearch.focus();
+            });
+        });
+
+        // Follow buttons (creators)
+        document.querySelectorAll('.creator-result-follow').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (this.textContent === 'Follow') {
+                    this.textContent = 'Following';
+                    this.classList.add('following');
+                } else {
+                    this.textContent = 'Follow';
+                    this.classList.remove('following');
+                }
+            });
+        });
+
+        // Tag follow buttons
+        document.querySelectorAll('.tag-follow').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (this.textContent === 'Follow Tag') {
+                    this.textContent = 'Following';
+                    this.classList.add('following');
+                } else {
+                    this.textContent = 'Follow Tag';
+                    this.classList.remove('following');
+                }
+            });
+        });
+
+        // Board save buttons
+        document.querySelectorAll('.board-save').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (this.textContent === 'Save Board') {
+                    this.textContent = 'Saved';
+                    this.classList.add('saved');
+                } else {
+                    this.textContent = 'Save Board';
+                    this.classList.remove('saved');
+                }
+            });
+        });
+
+        // Post overlay buttons
+        document.querySelectorAll('.overlay-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('fa-heart')) {
+                    icon.classList.toggle('fa-regular');
+                    icon.classList.toggle('fa-solid');
+                    this.style.background = icon.classList.contains('fa-solid') ? 'var(--electric-pink)' : 'rgba(255,255,255,0.25)';
+                }
+                if (icon.classList.contains('fa-bookmark')) {
+                    icon.classList.toggle('fa-regular');
+                    icon.classList.toggle('fa-solid');
+                    this.style.background = icon.classList.contains('fa-solid') ? 'var(--royal-purple)' : 'rgba(255,255,255,0.25)';
+                }
+            });
+        });
+
+        // Navbar scroll
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            const topNavbar = document.getElementById('topNavbar');
+            if (currentScroll > 50) {
+                topNavbar.classList.add('scrolled');
+            } else {
+                topNavbar.classList.remove('scrolled');
+            }
+            lastScroll = currentScroll;
+        });
+
+        function openComments(id) {
+            const el = document.getElementById("comments-" + id);
+
+            if (!el) return;
+
+            el.classList.toggle("open");
+        }
+
+
+
+        const searchInput = document.querySelector("#megaSearch");
+
+        searchInput.addEventListener("input", async () => {
+            const q = searchInput.value.trim();
+
+            if (q === "") {
+                window.location.reload();
+                return;
+            }
+
+            const res = await fetch(`/api/discover-search/?q=${q}`);
+            const data = await res.json();
+
+            const container = document.getElementById("discoverPosts");
+
+            if (data.count === 0) {
+                container.innerHTML = `
+                    <div class="empty-search">
+                        Couldn't find what you're looking for.
+                    </div>
+                `;
+            } else {
+                container.innerHTML = data.html;
+            }
+        });
+
+
+        const sidebarBadge = document.getElementById("sidebarUnreadBadge");
+
+        const notifSocket = new WebSocket(
+            "ws://" + window.location.host + "/ws/notifications/"
+        );
+
+        notifSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+
+            if (sidebarBadge) {
+                sidebarBadge.innerText = Number(sidebarBadge.innerText || 0) + 1;
+            }
+        };
+    </script>
+</body>
+
+</html>

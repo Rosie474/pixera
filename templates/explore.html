@@ -1,0 +1,1325 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore — Pixera</title>
+    <link rel="stylesheet" href="{% static 'explore.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+    <div id="glowup-preloader" class="glowup-preloader">
+        <div class="preloader-glass-plate">
+            <div class="particles-container">
+                <div class="particle particle-1"></div>
+                <div class="particle particle-2"></div>
+                <div class="particle particle-3"></div>
+                <div class="particle particle-4"></div>
+                <div class="particle particle-5"></div>
+                <div class="particle particle-6"></div>
+                <div class="particle particle-7"></div>
+                <div class="particle particle-8"></div>
+                <div class="particle particle-9"></div>
+                <div class="particle particle-10"></div>
+                <div class="particle particle-11"></div>
+                <div class="particle particle-12"></div>
+            </div>
+            <div class="orb-container">
+                <div class="orb-aura orb-aura-1"></div>
+                <div class="orb-aura orb-aura-2"></div>
+                <div class="orb-aura orb-aura-3"></div>
+                <div class="orb-core">
+                    <div class="orb-inner">
+                        <i class="fa-solid fa-sparkles"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="preloader-text">
+                <span class="text-line">Loading inspiration</span>
+                <span class="text-dots">
+                    <span class="preloader-dot">.</span>
+                    <span class="preloader-dot">.</span>
+                    <span class="preloader-dot">.</span>
+                </span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="preloaderProgress"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Sticky Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="{% url 'index' %}" class="logo">
+                  <img src="{% static 'pixeralogo1.png' %}"
+                    alt="Pixera"
+                    class="nav-logo-img">
+                <span class="logo-text">Pixera</span>
+            </a>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+                <span class="hamburger"></span>
+            </button>
+            <div class="nav-menu" id="navMenu">
+                <a href="{% url "index" %}" class="nav-link" target="_self">Home</a>
+                <a href="{% url "explore" %}" class="nav-link active" target="_self">Explore</a>
+                <a href="{% url "community" %}" class="nav-link" target="_self">Community</a>
+                <a href="{% url "login" %}" class="nav-link nav-login" target="_blank">Login</a>
+                <a href="{% url "signup" %}" class="btn btn-primary btn-small" target="_blank">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Explore Header -->
+    <section class="explore-hero" id="home">
+        <div class="explore-hero-bg">
+            <div class="explore-shape explore-shape-1"></div>
+            <div class="explore-shape explore-shape-2"></div>
+            <div class="explore-shape explore-shape-3"></div>
+            <div class="explore-shape explore-shape-4"></div>
+        </div>
+        <div class="explore-hero-container">
+            <div class="explore-hero-content">
+                <div class="explore-hero-badge">
+                    <span class="badge-dot"></span>
+                    <span>Discover what millions are saving</span>
+                </div>
+                <h1 class="explore-hero-title">
+                    Find Your<br>
+                    <span class="gradient-text">Next Inspiration</span>
+                </h1>
+                <p class="explore-hero-subtitle">
+                    Dive into a curated universe of visual inspiration across every interest. Save, share, and build your personal collection — one stunning discovery at a time.
+                </p>
+                <div class="explore-search-wrapper">
+                    <div class="explore-search-bar" id="exploreSearchBar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search inspiration: interior design, cozy room, creative routine..." id="searchInput">
+                        <button class="search-btn" id="searchBtn">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="quick-categories">
+                    <span class="quick-label">Trending now:</span>
+                    <button class="quick-chip" data-category="skincare">Skincare</button>
+                    <button class="quick-chip" data-category="fashion">Fashion</button>
+                    <button class="quick-chip" data-category="wellness">Wellness</button>
+                    <button class="quick-chip" data-category="room">Room Decor</button>
+                    <button class="quick-chip" data-category="hair">Hair</button>
+                    <button class="quick-chip" data-category="nails">Nails</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Categories Section -->
+    <section class="trending-categories">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-eyebrow">Browse by Category</span>
+                <h2 class="section-title">What Are You<br><span class="gradient-text">In the Mood For?</span></h2>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card category-fashion">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=700&fit=crop" alt="Fashion">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-icon"><i class="fa-solid fa-shirt"></i></div>
+                        <h3 class="category-name">Fashion</h3>
+                        <span class="category-count">24.8K posts</span>
+                    </div>
+                    <div class="category-glow"></div>
+                </div>
+                <div class="category-card category-hair">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&h=700&fit=crop" alt="Hair">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <h3 class="category-name">Hair</h3>
+                        <span class="category-count">18.3K posts</span>
+                    </div>
+                    <div class="category-glow"></div>
+                </div>
+                <div class="category-card category-nails">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&h=700&fit=crop" alt="Nails">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-icon"><i class="fa-solid fa-hand-sparkles"></i></div>
+                        <h3 class="category-name">Nails</h3>
+                        <span class="category-count">12.1K posts</span>
+                    </div>
+                    <div class="category-glow"></div>
+                </div>
+                <div class="category-card category-wellness">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=500&h=700&fit=crop" alt="Wellness">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-icon"><i class="fa-solid fa-spa"></i></div>
+                        <h3 class="category-name">Wellness</h3>
+                        <span class="category-count">31.5K posts</span>
+                    </div>
+                    <div class="category-glow"></div>
+                </div>
+                <div class="category-card category-skincare">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&h=700&fit=crop" alt="Skincare">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-icon"><i class="fa-solid fa-droplet"></i></div>
+                        <h3 class="category-name">Skincare</h3>
+                        <span class="category-count">42.7K posts</span>
+                    </div>
+                    <div class="category-glow"></div>
+                </div>
+                <div class="category-card category-room">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=500&h=700&fit=crop" alt="Room Decor">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-icon"><i class="fa-solid fa-couch"></i></div>
+                        <h3 class="category-name">Room Decor</h3>
+                        <span class="category-count">19.6K posts</span>
+                    </div>
+                    <div class="category-glow"></div>
+                </div>
+                <div class="category-card category-fitness">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&h=700&fit=crop" alt="Fitness">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-icon"><i class="fa-solid fa-dumbbell"></i></div>
+                        <h3 class="category-name">Fitness</h3>
+                        <span class="category-count">27.2K posts</span>
+                    </div>
+                    <div class="category-glow"></div>
+                </div>
+                <div class="category-card category-lifestyle">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&h=700&fit=crop" alt="Lifestyle">
+                    </div>
+                    <div class="category-overlay">
+                        <div class="category-icon"><i class="fa-solid fa-sun"></i></div>
+                        <h3 class="category-name">Lifestyle</h3>
+                        <span class="category-count">35.9K posts</span>
+                    </div>
+                    <div class="category-glow"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pinterest-Style Inspiration Grid -->
+    <section class="inspiration-feed">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-eyebrow">Trending Now</span>
+                <h2 class="section-title">Inspiration<br><span class="gradient-text">For Every Mood</span></h2>
+                <p class="section-subtitle">
+                    Handpicked by our community of 2.4M+ curators. Tap any card to save it to your collection.
+                </p>
+            </div>
+            <div class="feed-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="beauty">Beauty</button>
+                <button class="filter-btn" data-filter="fashion">Fashion</button>
+                <button class="filter-btn" data-filter="wellness">Wellness</button>
+                <button class="filter-btn" data-filter="room">Room</button>
+                <button class="filter-btn" data-filter="mood">Mood</button>
+            </div>
+            <div class="inspiration-masonry">
+                <!-- Beauty Post 1 -->
+                <div class="inspiration-card" data-category="beauty">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=550&fit=crop" alt="Skincare routine">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@amaraglows</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Minimalist Interior Design</span>
+                            <span class="meta-category">Interior</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 12.4K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 8.7K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fashion Post 1 -->
+                <div class="inspiration-card" data-category="fashion">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&h=600&fit=crop" alt="Fashion">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@jazzylifestyle</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Summer Aesthetic Looks</span>
+                            <span class="meta-category">Fashion</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 9.2K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 15.1K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Room Post 1 -->
+                <div class="inspiration-card" data-category="room">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=400&h=450&fit=crop" alt="Room decor">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@priyainpower</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Cozy Minimalist Bedroom</span>
+                            <span class="meta-category">Room Decor</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 21.3K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 18.6K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wellness Post 1 -->
+                <div class="inspiration-card" data-category="wellness">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=500&fit=crop" alt="Wellness">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@zoeglowfit</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Morning Routine Inspiration</span>
+                            <span class="meta-category">Lifestyle</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 33.7K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 27.4K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mood Post 1 -->
+                <div class="inspiration-card" data-category="mood">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&h=650&fit=crop" alt="Mood">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@amaraglows</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Dream Board Aesthetic</span>
+                            <span class="meta-category">Mood</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 16.8K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 22.1K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Beauty Post 2 -->
+                <div class="inspiration-card" data-category="beauty">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=480&fit=crop" alt="Beauty">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@jazzylifestyle</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Bold Color Trends</span>
+                            <span class="meta-category">Style</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 28.4K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 41.2K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fashion Post 2 -->
+                <div class="inspiration-card" data-category="fashion">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=550&fit=crop" alt="Fashion">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@priyainpower</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Quiet Luxury Capsule</span>
+                            <span class="meta-category">Fashion</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 14.6K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 19.3K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Room Post 2 -->
+                <div class="inspiration-card" data-category="room">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=500&fit=crop" alt="Room">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@zoeglowfit</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Boho Reading Nook</span>
+                            <span class="meta-category">Room Decor</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 8.9K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 11.4K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wellness Post 2 -->
+                <div class="inspiration-card" data-category="wellness">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=520&fit=crop" alt="Wellness">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@amaraglows</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Movement & Mindfulness</span>
+                            <span class="meta-category">Wellness</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 19.1K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 24.7K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mood Post 2 -->
+                <div class="inspiration-card" data-category="mood">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=580&fit=crop" alt="Mood">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@jazzylifestyle</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Productive Morning Vibes</span>
+                            <span class="meta-category">Mood</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 45.2K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 62.8K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Beauty Post 3 -->
+                <div class="inspiration-card" data-category="beauty">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=460&fit=crop" alt="Nails">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@priyainpower</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Modern Design Details</span>
+                            <span class="meta-category">Design</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 36.9K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 51.3K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fashion Post 3 -->
+                <div class="inspiration-card" data-category="fashion">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1550614000-4b9519e02a48?w=400&h=620&fit=crop" alt="Fashion">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@zoeglowfit</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Everyday Style Goals</span>
+                            <span class="meta-category">Fashion</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 11.7K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 14.2K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Room Post 3 -->
+                <div class="inspiration-card" data-category="room">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=400&h=480&fit=crop" alt="Room">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@amaraglows</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Sage Green Sanctuary</span>
+                            <span class="meta-category">Room Decor</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 17.5K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 20.8K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wellness Post 3 -->
+                <div class="inspiration-card" data-category="wellness">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=400&h=540&fit=crop" alt="Wellness">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@jazzylifestyle</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Creative Sunday Reset</span>
+                            <span class="meta-category">Lifestyle</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 22.6K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 31.9K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mood Post 3 -->
+                <div class="inspiration-card" data-category="mood">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=500&fit=crop" alt="Mood">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@priyainpower</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Main Character Energy</span>
+                            <span class="meta-category">Mood</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 28.3K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 35.7K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Beauty Post 4 -->
+                <div class="inspiration-card" data-category="beauty">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&h=470&fit=crop" alt="Beauty">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@zoeglowfit</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Design Color Theory Guide</span>
+                            <span class="meta-category">Interior</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 15.2K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 19.8K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fashion Post 4 -->
+                <div class="inspiration-card" data-category="fashion">
+                    <div class="inspiration-image">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=560&fit=crop" alt="Fashion">
+                        <div class="inspiration-overlay">
+                            <div class="overlay-actions">
+                                <button class="overlay-btn save-btn" data-action="save"><i class="fa-solid fa-bookmark"></i></button>
+                                <button class="overlay-btn like-btn" data-action="like"><i class="fa-solid fa-heart"></i></button>
+                                <button class="overlay-btn share-btn" data-action="share"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="overlay-creator">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop&crop=face" alt="Creator">
+                                <span>@amaraglows</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inspiration-meta">
+                        <div class="meta-left">
+                            <span class="meta-title">Evening Inspiration</span>
+                            <span class="meta-category">Fashion</span>
+                        </div>
+                        <div class="meta-right">
+                            <span class="meta-saves"><i class="fa-solid fa-bookmark"></i> 13.4K</span>
+                            <span class="meta-likes"><i class="fa-solid fa-heart"></i> 17.6K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="feed-load-more">
+                <button class="btn btn-outline btn-large" id="loadMoreBtn">
+                    <i class="fa-solid fa-spinner"></i>
+                    Load More Inspiration
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Tags Section -->
+    <section class="trending-tags">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-eyebrow">Trending Tags</span>
+                <h2 class="section-title">Join the<br><span class="gradient-text">Conversation</span></h2>
+            </div>
+            <div class="tags-cloud">
+                <a href="#" class="tag-card tag-large" data-action="tag">
+                    <span class="tag-icon"><i class="fa-solid fa-hashtag"></i></span>
+                    <span class="tag-name">CreateDaily</span>
+                    <span class="tag-count">2.4M posts</span>
+                    <div class="tag-glow"></div>
+                </a>
+                <a href="#" class="tag-card" data-action="tag">
+                    <span class="tag-icon"><i class="fa-solid fa-hashtag"></i></span>
+                    <span class="tag-name">DreamSpaces</span>
+                    <span class="tag-count">1.8M posts</span>
+                    <div class="tag-glow"></div>
+                </a>
+                <a href="#" class="tag-card tag-large" data-action="tag">
+                    <span class="tag-icon"><i class="fa-solid fa-hashtag"></i></span>
+                    <span class="tag-name">CleanAesthetic</span>
+                    <span class="tag-count">3.1M posts</span>
+                    <div class="tag-glow"></div>
+                </a>
+                <a href="#" class="tag-card" data-action="tag">
+                    <span class="tag-icon"><i class="fa-solid fa-hashtag"></i></span>
+                    <span class="tag-name">RoomInspo</span>
+                    <span class="tag-count">987K posts</span>
+                    <div class="tag-glow"></div>
+                </a>
+                <a href="#" class="tag-card" data-action="tag">
+                    <span class="tag-icon"><i class="fa-solid fa-hashtag"></i></span>
+                    <span class="tag-name">DesignAesthetic</span>
+                    <span class="tag-count">1.2M posts</span>
+                    <div class="tag-glow"></div>
+                </a>
+                <a href="#" class="tag-card tag-large" data-action="tag">
+                    <span class="tag-icon"><i class="fa-solid fa-hashtag"></i></span>
+                    <span class="tag-name">CreativeRoutine</span>
+                    <span class="tag-count">2.7M posts</span>
+                    <div class="tag-glow"></div>
+                </a>
+                <a href="#" class="tag-card" data-action="tag">
+                    <span class="tag-icon"><i class="fa-solid fa-hashtag"></i></span>
+                    <span class="tag-name">ThatVibe</span>
+                    <span class="tag-count">1.5M posts</span>
+                    <div class="tag-glow"></div>
+                </a>
+                <a href="#" class="tag-card" data-action="tag">
+                    <span class="tag-icon"><i class="fa-solid fa-hashtag"></i></span>
+                    <span class="tag-name">StyleTok</span>
+                    <span class="tag-count">890K posts</span>
+                    <div class="tag-glow"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Creators Section -->
+    <section class="featured-creators">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-eyebrow">Top Creators</span>
+                <h2 class="section-title">Creators<br><span class="gradient-text">To Follow</span></h2>
+                <p class="section-subtitle">
+                    The creators shaping trends and building communities. Follow their journeys and get inspired daily.
+                </p>
+            </div>
+            <div class="creators-row">
+                <div class="creator-preview-card">
+                    <div class="creator-preview-cover">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=200&fit=crop" alt="Cover">
+                    </div>
+                    <div class="creator-preview-body">
+                        <div class="creator-preview-avatar-wrap">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop&crop=face" alt="Amara Chen" class="creator-preview-avatar">
+                            <div class="creator-preview-badge crown"><i class="fa-solid fa-crown"></i></div>
+                        </div>
+                        <h3 class="creator-preview-name">Alex Chen</h3>
+                        <p class="creator-preview-handle">@alexcreates</p>
+                        <p class="creator-preview-niche">Lifestyle & Design</p>
+                        <div class="creator-preview-stats">
+                            <div><span>542K</span> Followers</div>
+                            <div><span>1.2M</span> Likes</div>
+                        </div>
+                        <button class="btn btn-primary btn-full follow-btn" data-action="follow">
+                            <i class="fa-solid fa-plus"></i> Follow
+                        </button>
+                    </div>
+                </div>
+                <div class="creator-preview-card">
+                    <div class="creator-preview-cover">
+                        <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=200&fit=crop" alt="Cover">
+                    </div>
+                    <div class="creator-preview-body">
+                        <div class="creator-preview-avatar-wrap">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face" alt="Jasmine Brooks" class="creator-preview-avatar">
+                            <div class="creator-preview-badge verified"><i class="fa-solid fa-check"></i></div>
+                        </div>
+                        <h3 class="creator-preview-name">Jordan Brooks</h3>
+                        <p class="creator-preview-handle">@jordancreates</p>
+                        <p class="creator-preview-niche">Fashion & Style</p>
+                        <div class="creator-preview-stats">
+                            <div><span>328K</span> Followers</div>
+                            <div><span>890K</span> Likes</div>
+                        </div>
+                        <button class="btn btn-primary btn-full follow-btn" data-action="follow">
+                            <i class="fa-solid fa-plus"></i> Follow
+                        </button>
+                    </div>
+                </div>
+                <div class="creator-preview-card">
+                    <div class="creator-preview-cover">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=200&fit=crop" alt="Cover">
+                    </div>
+                    <div class="creator-preview-body">
+                        <div class="creator-preview-avatar-wrap">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face" alt="Priya Sharma" class="creator-preview-avatar">
+                            <div class="creator-preview-badge verified"><i class="fa-solid fa-check"></i></div>
+                        </div>
+                        <h3 class="creator-preview-name">Riley Sharma</h3>
+                        <p class="creator-preview-handle">@rileyinspires</p>
+                        <p class="creator-preview-niche">Career & Creativity</p>
+                        <div class="creator-preview-stats">
+                            <div><span>715K</span> Followers</div>
+                            <div><span>2.1M</span> Likes</div>
+                        </div>
+                        <button class="btn btn-primary btn-full follow-btn" data-action="follow">
+                            <i class="fa-solid fa-plus"></i> Follow
+                        </button>
+                    </div>
+                </div>
+                <div class="creator-preview-card">
+                    <div class="creator-preview-cover">
+                        <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&h=200&fit=crop" alt="Cover">
+                    </div>
+                    <div class="creator-preview-body">
+                        <div class="creator-preview-avatar-wrap">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop&crop=face" alt="Zoe Martinez" class="creator-preview-avatar">
+                            <div class="creator-preview-badge crown"><i class="fa-solid fa-crown"></i></div>
+                        </div>
+                        <h3 class="creator-preview-name">Zoe Martinez</h3>
+                        <p class="creator-preview-handle">@zoevisuals</p>
+                        <p class="creator-preview-niche">Photography & Visuals</p>
+                        <div class="creator-preview-stats">
+                            <div><span>421K</span> Followers</div>
+                            <div><span>967K</span> Likes</div>
+                        </div>
+                        <button class="btn btn-primary btn-full follow-btn" data-action="follow">
+                            <i class="fa-solid fa-plus"></i> Follow
+                        </button>
+                    </div>
+                </div>
+                <div class="creator-preview-card">
+                    <div class="creator-preview-cover">
+                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=200&fit=crop" alt="Cover">
+                    </div>
+                    <div class="creator-preview-body">
+                        <div class="creator-preview-avatar-wrap">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&h=120&fit=crop&crop=face" alt="Luna Reyes" class="creator-preview-avatar">
+                            <div class="creator-preview-badge verified"><i class="fa-solid fa-check"></i></div>
+                        </div>
+                        <h3 class="creator-preview-name">Luna Reyes</h3>
+                        <p class="creator-preview-handle">@lunacreates</p>
+                        <p class="creator-preview-niche">Art & Illustration</p>
+                        <div class="creator-preview-stats">
+                            <div><span>289K</span> Followers</div>
+                            <div><span>654K</span> Likes</div>
+                        </div>
+                        <button class="btn btn-primary btn-full follow-btn" data-action="follow">
+                            <i class="fa-solid fa-plus"></i> Follow
+                        </button>
+                    </div>
+                </div>
+                <div class="creator-preview-card">
+                    <div class="creator-preview-cover">
+                        <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=400&h=200&fit=crop" alt="Cover">
+                    </div>
+                    <div class="creator-preview-body">
+                        <div class="creator-preview-avatar-wrap">
+                            <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=120&h=120&fit=crop&crop=face" alt="Maya Thompson" class="creator-preview-avatar">
+                            <div class="creator-preview-badge verified"><i class="fa-solid fa-check"></i></div>
+                        </div>
+                        <h3 class="creator-preview-name">Maya Thompson</h3>
+                        <p class="creator-preview-handle">@mayadesigns</p>
+                        <p class="creator-preview-niche">Home & Lifestyle</p>
+                        <div class="creator-preview-stats">
+                            <div><span>198K</span> Followers</div>
+                            <div><span>432K</span> Likes</div>
+                        </div>
+                        <button class="btn btn-primary btn-full follow-btn" data-action="follow">
+                            <i class="fa-solid fa-plus"></i> Follow
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="explore-cta">
+        <div class="explore-cta-bg">
+            <div class="explore-cta-shape cta-shape-1"></div>
+            <div class="explore-cta-shape cta-shape-2"></div>
+            <div class="explore-cta-shape cta-shape-3"></div>
+        </div>
+        <div class="explore-cta-container">
+            <div class="explore-cta-content">
+                <div class="explore-cta-badge">
+                    <i class="fa-solid fa-sparkles"></i>
+                    <span>Join 2.4M+ Curators</span>
+                </div>
+                <h2 class="explore-cta-title">
+                    Your Collection<br>
+                    <span class="gradient-text">Awaits</span>
+                </h2>
+                <p class="explore-cta-subtitle">
+                    Save your favorite inspiration, build collections, track your creative journey, and connect with a community of passionate creators who inspire each other.
+                </p>
+                <div class="explore-cta-buttons">
+                    <a href="signup.html" class="btn btn-primary btn-large">
+                        <i class="fa-solid fa-rocket"></i>
+                        Create Free Account
+                    </a>
+                    <a href="login.html" class="btn btn-outline-white btn-large">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        Already a Member? Login
+                    </a>
+                </div>
+                <div class="explore-cta-features">
+                    <div class="cta-feature">
+                        <div class="cta-feature-icon"><i class="fa-solid fa-palette"></i></div>
+                        <span>Unlimited Collections</span>
+                    </div>
+                    <div class="cta-feature">
+                        <div class="cta-feature-icon"><i class="fa-solid fa-book-open"></i></div>
+                        <span>Idea Journaling</span>
+                    </div>
+                    <div class="cta-feature">
+                        <div class="cta-feature-icon"><i class="fa-solid fa-comments"></i></div>
+                        <span>Creative Chats</span>
+                    </div>
+                    <div class="cta-feature">
+                        <div class="cta-feature-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <span>AI Discovery</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo footer-logo">
+                        <span class="logo-icon"><i class="fa-solid fa-sparkles"></i></span>
+                        <span class="logo-text">Pixera</span>
+                    </a>
+                    <p class="footer-tagline">
+                        The premium social network for women who refuse to settle. 
+                        Built with love in Los Angeles.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="#" class="social-link"><i class="fa-brands fa-pinterest"></i></a>
+                        <a href="#" class="social-link"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links-group">
+                    <h4 class="footer-heading">Platform</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Discover Fest</a></li>
+                        <li><a href="#">Vision Boards</a></li>
+                        <li><a href="#">Mood Journal</a></li>
+                        <li><a href="#">Glow Chats</a></li>
+                        <li><a href="#">Mobile App</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4 class="footer-heading">Community</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Top Creators</a></li>
+                        <li><a href="#">Success Stories</a></li>
+                        <li><a href="#">Events & Meetups</a></li>
+                        <li><a href="#">Ambassador Program</a></li>
+                        <li><a href="#">Brand Partnerships</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4 class="footer-heading">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press Kit</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4 class="footer-heading">Stay Glowing</h4>
+                    <p class="footer-newsletter-text">
+                        Get weekly glow-up tips, exclusive creator content, and early access to new features.
+                    </p>
+                    <form class="footer-form" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="your@email.com" class="footer-input">
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; 2026 Pixera Inc. All rights reserved.</p>
+                <div class="footer-badges">
+                    <span class="footer-badge"><i class="fa-brands fa-apple"></i> iOS App</span>
+                    <span class="footer-badge"><i class="fa-brands fa-android"></i> Android App</span>
+                    <span class="footer-badge"><i class="fa-solid fa-globe"></i> Web Platform</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login/Signup Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-container">
+            <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-content">
+                <div class="modal-icon">
+                    <i class="fa-solid fa-sparkles"></i>
+                </div>
+                <h3 class="modal-title">Join the Creative Community</h3>
+                <p class="modal-text">
+                    Create a free account to save inspiration, build collections, follow creators, and unlock the full Pixera experience.
+                </p>
+                <div class="modal-features">
+                    <div class="modal-feature">
+                        <i class="fa-solid fa-bookmark"></i>
+                        <span>Save unlimited posts</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fa-solid fa-palette"></i>
+                        <span>Build collections</span>
+                    </div>
+                    <div class="modal-feature">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <span>Follow top creators</span>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <a href="signup.html" class="btn btn-primary btn-full btn-large">
+                        <i class="fa-solid fa-rocket"></i>
+                        Create Free Account
+                    </a>
+                    <a href="login.html" class="btn btn-outline btn-full btn-large">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        Already a Member? Login
+                    </a>
+                </div>
+                <p class="modal-note">No credit card required. Cancel anytime.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Navigation Toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        mobileToggle.addEventListener('click', () => {
+            mobileToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        });
+
+        // Sticky Navbar Background
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    mobileToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                }
+            });
+        });
+
+        // Login Modal
+        const loginModal = document.getElementById('loginModal');
+        const modalClose = document.getElementById('modalClose');
+
+        function openModal() {
+            loginModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            loginModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        modalClose.addEventListener('click', closeModal);
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) closeModal();
+        });
+
+        // Interactions that trigger login modal
+        document.querySelectorAll('[data-action="save"], [data-action="like"], [data-action="share"], [data-action="follow"], [data-action="tag"]').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal();
+            });
+        });
+
+        // Search interaction
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const exploreSearchBar = document.getElementById('exploreSearchBar');
+
+        function handleSearch() {
+            if (searchInput.value.trim().length > 0) {
+                openModal();
+            }
+        }
+
+        searchBtn.addEventListener('click', handleSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSearch();
+        });
+
+        // Quick category chips
+        document.querySelectorAll('.quick-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                openModal();
+            });
+        });
+
+        // Filter buttons
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const inspirationCards = document.querySelectorAll('.inspiration-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+
+                inspirationCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.display = '';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, 50);
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            card.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Load More button
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        loadMoreBtn.addEventListener('click', () => {
+            openModal();
+        });
+
+        // Intersection Observer for entrance animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.category-card, .inspiration-card, .tag-card, .creator-preview-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+    <script>
+        (function() {
+            'use strict';
+
+            const CONFIG = {
+                minDisplayTime: 1800,
+                progressInterval: 40,
+                fadeOutDuration: 800,
+                exitClassDelay: 200
+            };
+
+            let progress = 0;
+            let progressIntervalId = null;
+            let minTimerId = null;
+            let isReady = false;
+            let isMinTimeElapsed = false;
+
+            const preloader = document.getElementById('glowup-preloader');
+            const progressBar = document.getElementById('preloaderProgress');
+
+            function startProgress() {
+                progressIntervalId = setInterval(function() {
+                    const remaining = 100 - progress;
+                    const increment = Math.max(0.3, remaining * 0.015);
+                    progress = Math.min(100, progress + increment);
+
+                    if (progressBar) {
+                        progressBar.style.width = progress + '%';
+                    }
+
+                    if (progress >= 100) {
+                        clearInterval(progressIntervalId);
+                        checkReady();
+                    }
+                }, CONFIG.progressInterval);
+            }
+
+            function hidePreloader() {
+                if (!preloader) return;
+
+                preloader.classList.add('preloader-exiting');
+
+                setTimeout(function() {
+                    preloader.classList.add('preloader-hidden');
+
+                    setTimeout(function() {
+                        if (preloader && preloader.parentNode) {
+                            preloader.parentNode.removeChild(preloader);
+                        }
+                    }, CONFIG.fadeOutDuration + 100);
+                }, CONFIG.exitClassDelay);
+            }
+
+            function checkReady() {
+                if (isReady && isMinTimeElapsed && progress >= 100) {
+                    hidePreloader();
+                }
+            }
+
+            function onPageLoaded() {
+                isReady = true;
+                if (progressIntervalId) {
+                    clearInterval(progressIntervalId);
+                }
+                progress = 100;
+                if (progressBar) {
+                    progressBar.style.width = '100%';
+                }
+                checkReady();
+            }
+
+            function onMinTimeElapsed() {
+                isMinTimeElapsed = true;
+                checkReady();
+            }
+
+            function init() {
+                startProgress();
+                minTimerId = setTimeout(onMinTimeElapsed, CONFIG.minDisplayTime);
+
+                if (document.readyState === 'complete') {
+                    onPageLoaded();
+                } else {
+                    window.addEventListener('load', onPageLoaded);
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+</body>
+</html>
